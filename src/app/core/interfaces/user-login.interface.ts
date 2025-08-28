@@ -1,0 +1,2 @@
+export interface UserLoginInterface {
+}
