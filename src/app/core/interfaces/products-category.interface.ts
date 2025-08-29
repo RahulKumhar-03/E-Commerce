@@ -1,2 +1,4 @@
-export interface ProductsCategoryInterface {
+export interface ProductsCategory {
+    categoryId: number;
+    categoryName: string;
 }

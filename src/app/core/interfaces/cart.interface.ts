@@ -1,2 +1,2 @@
-export interface CartInterface {
+export interface Cart {
 }

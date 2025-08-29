@@ -1,0 +1,20 @@
+.example-container {
+  width: auto;
+  height: 100%;
+  border: 1px solid #555;
+  background-color: white;
+}
+mat-drawer{
+  width: 15%;
+  background-color: lightgray;
+}
+a{
+  text-decoration: none;
+  color: slategray;
+  font-weight: 500;
+  padding: 10px;
+}
+.active{
+  background-color: beige;
+  border-radius: 20px;
+}

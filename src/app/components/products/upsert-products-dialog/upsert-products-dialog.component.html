@@ -1,0 +1,39 @@
+<div style="justify-items: center;">
+    <h2 style="padding-top: 5px;">{{service.isEditting() ? 'Update Appointment Record' : 'New Appointment'}}</h2>
+    
+    <form [formGroup]="productForm" (submit)="submitProductForm()" style="display: flex; flex-direction: column; margin: auto; width: 80%; padding: 20px 0;">
+        <mat-form-field>
+            <input matInput placeholder="Enter Product Name" formControlName="name">
+        </mat-form-field>
+        
+        <mat-form-field>
+            <input matInput placeholder="Enter Product Description" formControlName="description">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput type="number" [min]="500" placeholder="Enter Product Price" formControlName="price">
+        </mat-form-field>
+
+        <!-- <mat-form-field>
+            <mat-label>Select Category ID</mat-label>
+            <mat-select formControlName="categoryId">
+                @for(category of categories; track category.categoryName){
+                    <mat-option [value]="category.categoryId">{{category.categoryId}}-{{category.categoryName}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field> -->
+        <mat-form-field>
+            <input matInput placeholder="Enter Category ID" formControlName="categoryId">
+        </mat-form-field>
+
+        <div style="margin-top: 5px;">
+            <button mat-button [disabled]="productForm.invalid" type="submit">
+                Submit
+            </button>
+            <button mat-button (click)="onClose()">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>
+      

@@ -1,1 +1,58 @@
-<p>login-signup works!</p>
+<div style="justify-items: center; width: 100%;">
+    <mat-tab-group style="width: 80%;">
+        <mat-tab label="Login">
+            <h2 style="padding-top: 5px;">User Login</h2>
+            <form [formGroup]="loginForm" (submit)="submitLoginForm()" style="display: flex; flex-direction: column; margin: auto; width: 70%; padding: 20px 0;">
+                
+                <mat-form-field>
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email" placeholder="Please Enter your Email" formControlName="email">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Password</mat-label>
+                    <input matInput type="password" placeholder="Enter Your Password" formControlName="password">
+                </mat-form-field>
+
+                <div style="margin-top: 5px;">
+                    <button mat-button [disabled]="loginForm.invalid" type="submit">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </mat-tab>
+
+        <mat-tab label="Register">
+            <h2 style="padding-top: 5px;">User Sign Up</h2>
+            <form [formGroup]="signUpForm" (submit)="submitRegisterForm()" style="display: flex; flex-direction: column; margin: auto; width: 70%; padding: 20px 0;">
+                
+                <mat-form-field>
+                    <input matInput placeholder="Please Enter your Name" formControlName="name">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput type="tel" placeholder="Phone No." formControlName="phone">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Your Address eg. Mumbai" formControlName="address">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput type="email" placeholder="Please Enter your Email" formControlName="email">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput type="password" placeholder="Enter Your Password" formControlName="password">
+                    <mat-hint>Password length should atleast 8</mat-hint>
+                </mat-form-field>
+
+                <div style="margin-top: 5px;">
+                    <button mat-button [disabled]="signUpForm.invalid" type="submit">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </mat-tab>
+    </mat-tab-group>
+</div>
