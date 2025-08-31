@@ -28,7 +28,6 @@ export class LoginSignupComponent {
     })
 
     this.signUpForm = this.fb.group({
-      id:[this.id() + 1, Validators.required],
       name: ['', Validators.required],
       address: ['',Validators.required],
       phone: ['', Validators.required],
@@ -40,12 +39,13 @@ export class LoginSignupComponent {
   public submitRegisterForm(){
     if(this.signUpForm.valid){
       const newUser = {
-        id: this.id() + 1,
+        id: this.authService.generateId(),
         name: this.signUpForm.value.name,
         phone: this.signUpForm.value.phone,
         address: this.signUpForm.value.address,
         email: this.signUpForm.value.email,
         password: this.signUpForm.value.password,
+        cart: [],
       } as User;
       this.authService.registerUser(newUser).subscribe({
         next:(res) => {

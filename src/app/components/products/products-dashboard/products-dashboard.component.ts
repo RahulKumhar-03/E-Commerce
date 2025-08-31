@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Products } from '../../../core/interfaces/products.interface';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog'
@@ -7,22 +7,36 @@ import { ProductService } from '../../../core/services/products/product.service'
 import{ MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatSelectModule } from '@angular/material/select';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { ProductsCategory } from '../../../core/interfaces/products-category.interface';
 
 @Component({
   selector: 'app-products-dashboard',
-  imports: [MatTableModule, MatDialogModule, MatIconModule, MatButtonModule],
+  imports: [MatTableModule, MatDialogModule, MatIconModule, MatButtonModule, MatPaginatorModule, MatSortModule, MatSelectModule, RouterLink, RouterLinkActive],
   templateUrl: './products-dashboard.component.html',
   styleUrl: './products-dashboard.component.scss'
 })
-export class ProductsDashboardComponent implements OnInit {
-
+export class ProductsDashboardComponent implements OnInit, AfterViewInit {
+  public categories: ProductsCategory[] = [];
   public dataSource = new MatTableDataSource<Products>();
   public displayedColumns: string[] = ['productId', 'productName', 'description', 'price', 'categoryId', 'action'];
+  public sortOption: string = 'None';
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private dialog: MatDialog, private productService: ProductService, private snackBar: MatSnackBar){}
 
   ngOnInit():void{
     this.loadProducts();
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   public loadProducts(){
@@ -33,6 +47,18 @@ export class ProductsDashboardComponent implements OnInit {
         }
       }
     })
+  }
+
+  public applySort(){
+    if(this.sortOption === 'price'){
+      this.dataSource.data = [...this.dataSource.data.sort((a,b) => a.price - b.price)];
+    } 
+    else if(this.sortOption === 'name'){
+      this.dataSource.data = [...this.dataSource.data.sort((a,b) => a.name.localeCompare(b.name))];
+    }
+    else {
+      this.dataSource.data = [...this.dataSource.data.sort((a,b) => a.id - b.id)];
+    }
   }
 
   public openProductDialog(productData?: Products){

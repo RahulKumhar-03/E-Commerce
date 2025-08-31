@@ -1,0 +1,18 @@
+<div style="margin: 20px;">
+    <h2>Create Category Page</h2>
+    <form [formGroup]="inventoryForm" (submit)="submitInventoryForm()">
+        <mat-form-field>
+            <mat-label>Enter the category name</mat-label>
+            <input matInput placeholder="Category Name" formControlName="categoryName">
+        </mat-form-field>
+
+        <div style="margin-top: 5px;">
+            <button mat-button [disabled]="inventoryForm.invalid" type="submit">
+                Submit
+            </button>
+            <button mat-button (click)="onClose()">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>

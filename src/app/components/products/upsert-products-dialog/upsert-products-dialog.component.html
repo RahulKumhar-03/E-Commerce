@@ -14,17 +14,27 @@
             <input matInput type="number" [min]="500" placeholder="Enter Product Price" formControlName="price">
         </mat-form-field>
 
-        <!-- <mat-form-field>
+        <mat-form-field>
             <mat-label>Select Category ID</mat-label>
             <mat-select formControlName="categoryId">
                 @for(category of categories; track category.categoryName){
                     <mat-option [value]="category.categoryId">{{category.categoryId}}-{{category.categoryName}}</mat-option>
                 }
             </mat-select>
-        </mat-form-field> -->
-        <mat-form-field>
-            <input matInput placeholder="Enter Category ID" formControlName="categoryId">
         </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Enter Product Quantity</mat-label>
+            <input matInput type="number" min="1" placeholder="Enter Quantity of Product" formControlName="quantity">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Select Product Images</mat-label>
+            <input matInput placeholder="Enter the Image Url" formControlName="productImages">
+        </mat-form-field>
+        <div style="margin-top: 10px;">
+            <button mat-button (click)="addImageUrl()">Add Image URL</button>
+        </div>
 
         <div style="margin-top: 5px;">
             <button mat-button [disabled]="productForm.invalid" type="submit">

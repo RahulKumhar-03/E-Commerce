@@ -10,9 +10,15 @@ import { Router } from '@angular/router';
 export class LoginRegisterService {
   public _isLoggedIn = signal<boolean>(false);
   public isLoggedIn = computed(() => this._isLoggedIn());
+  public prevUserId = signal(0);
   public router = inject(Router);
 
   constructor() { }
+
+  public generateId(): number{
+    this.prevUserId.update(val => val + 1);
+    return this.prevUserId();
+  }
 
   public getAllUsers():Observable<User[]>{
     let data = localStorage.getItem('users');

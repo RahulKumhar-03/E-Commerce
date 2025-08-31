@@ -1,1 +1,33 @@
-<p>product-detail works!</p>
+<div style="margin: 30px;">
+    <div style="display: flex; flex-direction: row; justify-content: space-evenly; margin: 15px 20px;">
+        <h2>Product Detail Page</h2>
+        <div style="display: flex; flex-direction: row; gap: 20px; align-items: center;">
+            <button mat-button routerLink="/all-products" class="btn btn-primary">Back to Products</button>
+            <h4>User: {{curentUser.name | firstName}}</h4>
+            <button mat-button routerLink="/goToCart"><mat-icon matBadge="curentUser" matBadge="{{ cartItemCount }}" matBadgePosition="after" matBadgeColor="accent" style="font-size: 30px; height: 30px; width: 30px;">shopping_cart</mat-icon></button>
+        </div>
+    </div>
+
+    <div style="justify-items: center;">
+        <mat-card class="product-card">
+            <mat-card-header>
+                <div style="display: flex; flex-direction: row; width: 100%; justify-content: space-between; margin: 10px 20px;">
+                    <mat-card-title>{{ product?.name }}</mat-card-title>
+                    <mat-card-subtitle>{{ product?.price | currency:'INR' }}</mat-card-subtitle>
+                </div>
+            </mat-card-header>
+
+            <mat-card-content style="justify-items: center;">
+                <div>
+                    <img class="product-images" [src]="product?.productsImages" alt="Product Image" class="product-image">
+                </div>
+                <p>{{ product?.description }}</p>
+            </mat-card-content>
+
+            <mat-card-footer style="margin: 10px;">
+                <button mat-button (click)="addToCart()">Add to Cart</button>
+            </mat-card-footer>
+        </mat-card>
+
+    </div>
+</div>

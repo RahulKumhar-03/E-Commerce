@@ -7,9 +7,26 @@ import { Observable, of } from 'rxjs';
 })
 export class ProductService {
   
+  private lastId = signal(this.getLastId() || 0);
   public isEditting = signal<boolean>(false);
 
   constructor() { }
+
+  public getLastId():number{
+    const productId = localStorage.getItem('lastProductId');
+    return productId ? parseInt(productId, 10) : 0;
+  }
+
+  private setLastProductId(id: number){
+    localStorage.setItem('lastProductId', id.toString());
+  }
+
+  public generateId(): number{
+    this.lastId.update(id => id + 1);
+    const newProductId = this.lastId();
+    this.setLastProductId(newProductId);
+    return newProductId;
+  }
 
   public getAllProducts():Observable<Products[]>{
     let products = JSON.parse(localStorage.getItem('allProducts') || '[]') as Products[];

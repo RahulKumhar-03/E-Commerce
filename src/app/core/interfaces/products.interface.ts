@@ -6,7 +6,8 @@ export interface Products {
     name: string;
     description: string;
     price: number;
+    quantity: number;
     categoryId: number;
     review: ProductsReview[];
-    productsImages: [];
+    productsImages: string[];
 }
