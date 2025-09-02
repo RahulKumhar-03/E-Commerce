@@ -10,10 +10,11 @@ import { MatCardModule } from '@angular/material/card';
 import { CurrencyPipe } from '@angular/common';
 import { CartService } from '../../../core/services/cart/cart.service';
 import { MatBadgeModule } from '@angular/material/badge';
+import { ReviewsListComponent } from "../../reviews/reviews-list/reviews-list.component";
 
 @Component({
   selector: 'app-product-detail',
-  imports: [MatButtonModule, MatIconModule, FirstNamePipe, RouterLink, MatCardModule, CurrencyPipe, MatBadgeModule],
+  imports: [MatButtonModule, MatIconModule, FirstNamePipe, RouterLink, MatCardModule, CurrencyPipe, MatBadgeModule, ReviewsListComponent],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss',
 })

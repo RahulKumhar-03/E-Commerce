@@ -1,0 +1,30 @@
+<div style="margin: 30px;">
+    <div style="display: flex; flex-direction: row; justify-content: space-between; margin: 0 10px;">
+        <h2>Review & Comments</h2>
+        <div style="display: flex; flex-direction: row; gap: 20px; align-items: center;">
+            <button mat-button (click)="openReviewDialog()"><mat-icon>add</mat-icon>Review</button>
+        </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+        @for(review of reviews; track review.id){
+            <mat-card appearance="outlined">
+                <mat-card-header style="display: flex; flex-direction: column;">
+                    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                        <mat-card-title>{{review.comment}}</mat-card-title>
+                        <h5>User ID: {{review.userId}}</h5>
+                    </div>
+                    <div>
+                        <mat-card-subtitle>Product Rating: {{review.reviewStar}}</mat-card-subtitle>
+                    </div>
+                </mat-card-header>
+
+                @if(currentUser.id === review.userId){
+                    <mat-card-actions>
+                        <button mat-button (click)="deleteReview(review.id)"><mat-icon>delete</mat-icon></button>
+                    </mat-card-actions>
+                }
+            </mat-card>
+        }
+    </div>
+</div>
