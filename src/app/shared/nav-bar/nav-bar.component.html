@@ -2,12 +2,15 @@
   <mat-drawer mode="side" opened>
     <div style="display: flex; flex-direction: column; gap: 20px; text-align: start; padding: 10px;">
             @if(authService.isLoggedIn()){
-                <button mat-button (click)="onLogout()">Logout</button>
-            }
+              <button mat-button (click)="onLogout()">Logout</button>
+            } 
             @else{
-                <button mat-button routerLink="login" routerLinkActive="active">Login</button>
+              <button mat-button routerLink="login" routerLinkActive="active">Login</button>
             }
-        <a routerLink="all-products" routerLinkActive="active">Products Dashboard</a>
+        <a routerLink="/all-products" routerLinkActive="active">Products Dashboard</a>
+        <a routerLink="/goToCart" routerLinkActive="active">Cart</a>
+        <a routerLink="/inventory" routerLinkActive="active">Inventory</a>
+        <a routerLink="/orders" routerLinkActive="active">Orders</a>
     </div>
   </mat-drawer>
   <mat-drawer-content>

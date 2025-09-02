@@ -11,9 +11,7 @@ import { LoginRegisterService } from '../../core/services/auth/login-register.se
   styleUrl: './nav-bar.component.scss'
 })
 export class NavBarComponent {
-  constructor(public authService: LoginRegisterService, private router: Router){
-    this.authService.userIsPresent();
-  }
+  constructor(public authService: LoginRegisterService, private router: Router){}
 
   public onLogout(){
     this.authService.logout();

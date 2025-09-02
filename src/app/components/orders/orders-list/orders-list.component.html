@@ -1,0 +1,39 @@
+<div style="padding: 15px 40px">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="orderId">
+            <th mat-header-cell *matHeaderCellDef>Order ID</th>
+            <td mat-cell *matCellDef="let element">{{ element.orderId }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="userName">
+            <th mat-header-cell *matHeaderCellDef>User Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.username }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="productsOrdered">
+            <th mat-header-cell *matHeaderCellDef>Products</th>
+            <td mat-cell *matCellDef="let element">
+                <mat-list role="list" class="expand-list">Products List
+                    @for(product of element.items; track product.product.name){
+                        <mat-list-item role="listitem">{{product.product.name}}</mat-list-item>
+                    }
+                </mat-list>
+            </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="totalPrice">
+            <th mat-header-cell *matHeaderCellDef>Price</th>
+            <td mat-cell *matCellDef="let element">{{ element.totalPrice | currency:'INR' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="orderDate">
+            <th mat-header-cell *matHeaderCellDef>Order Date</th>
+            <td mat-cell *matCellDef="let element">{{ element.date | date }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>

@@ -1,0 +1,59 @@
+<div style="justify-items: center; overflow-y: auto; height: 600px;">
+    <h2 style="padding-top: 5px;">New Review</h2>
+    
+    <form [formGroup]="reviewForm" (submit)="submitReviewForm()" style="display: flex; flex-direction: column; margin: auto; width: 80%; padding: 20px 0;">
+        <mat-form-field>
+            <mat-label>User ID</mat-label>
+            <input matInput placeholder="Enter the User ID" formControlName="userId" [disabled]="true">
+        </mat-form-field>
+        @if(reviewForm.get('userId')?.invalid && (reviewForm.get('userId')?.dirty || reviewForm.get('userId')?.touched)){
+            @if(reviewForm.get('userId')?.errors?.['required']){
+                <div class="error-message">User is required</div>
+            }
+        }
+
+        <mat-form-field>
+            <mat-label>Product ID</mat-label>
+            <input matInput placeholder="Enter the Product ID" formControlName="productId" [disabled]="true">
+        </mat-form-field>
+        @if(reviewForm.get('productId')?.invalid && (reviewForm.get('productId')?.dirty || reviewForm.get('productId')?.touched)){
+            @if(reviewForm.get('productId')?.errors?.['required']){
+                <div class="error-message">Product is required</div>
+            }
+        }
+        
+        <mat-form-field>
+            <mat-label>Enter Comment</mat-label>
+            <input matInput placeholder="Enter Your Comment" formControlName="comment">
+        </mat-form-field>
+        @if(reviewForm.get('comment')?.invalid && (reviewForm.get('comment')?.dirty || reviewForm.get('comment')?.touched)){
+            @if(reviewForm.get('comment')?.errors?.['required']){
+                <div class="error-message">Comment is required</div>
+            }
+        }
+
+        <mat-form-field>
+            <mat-label>Product Rating out of 5</mat-label>
+            <input matInput [max]="5" placeholder="Enter the review you want to give." formControlName="reviewStar">
+        </mat-form-field>
+        @if(reviewForm.get('reviewStar')?.invalid && (reviewForm.get('reviewStar')?.dirty || reviewForm.get('reviewStar')?.touched)){
+            @if(reviewForm.get('')?.errors?.['required']){
+                <div class="error-message">Product Review is required</div>
+            }
+
+            @if(reviewForm.get('reviewStar')?.errors?.['max']){
+                <div class="error-message">Product Review can be maximum 5</div>
+            }
+        }
+
+        <div style="margin-top: 5px;">
+            <button mat-button [disabled]="reviewForm.invalid" type="submit">
+                Submit
+            </button>
+            <button mat-button (click)="onClose()">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>
+      

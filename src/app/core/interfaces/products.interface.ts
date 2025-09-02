@@ -1,4 +1,3 @@
-import { ProductsCategory } from "./products-category.interface";
 import { ProductsReview } from "./products-review.interface";
 
 export interface Products {
@@ -6,7 +5,8 @@ export interface Products {
     name: string;
     description: string;
     price: number;
+    quantity: number;
     categoryId: number;
     review: ProductsReview[];
-    productsImages: [];
+    productsImages: string;
 }
