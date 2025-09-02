@@ -31,8 +31,6 @@ export class OrdersListComponent implements OnInit, AfterViewInit {
   public loadOrders(){
     this.dataSource.data = this.orderService.getOrders();
     this.orders = this.orderService.getOrders();
-    console.log(this.orders[0].items[0].product.name);
-    
   }
 
 }

@@ -29,7 +29,7 @@ export class UpsertProductsDialogComponent implements OnInit {
       categoryId:[null, Validators.required],
       description: ['', Validators.required],
       price: [500, Validators.required],
-      productImages: [[], Validators.required],
+      productImages: ['', Validators.required],
       quantity: [1, Validators.required],
     });
   }
@@ -52,15 +52,6 @@ export class UpsertProductsDialogComponent implements OnInit {
 
   public loadCategories(){
     this.categories = this.inventoryService.getInventory().category || [];
-  }
-
-  public addImageUrl(): void {
-    if (this.imageUrl) {
-      const updatedImages = this.productForm.value.productImages;
-      updatedImages.push(this.imageUrl);
-      this.productForm.controls['productImages'].setValue(updatedImages)  ;
-      this.imageUrl = ''; 
-    }
   }
   
   public submitProductForm(){

@@ -31,20 +31,23 @@ export class OrdersService {
   }
 
   public createNewOrder(userId: number, username: string, cartItems: Cart[]): void {
+    console.log(cartItems);
+    
     const newOrder: Orders = {
       orderId: this.orders.length + 1,
       userId,
       username,
       items: cartItems,
-      totalPrice: cartItems.reduce((sum, item) => sum + item.product.price * (item.quantity || 1), 0),
+      totalPrice: cartItems.reduce((sum, item) => sum + item.product.price * (item.quantity), 0),
       date: new Date(),
     };
     this.orders.push(newOrder);
     cartItems.map(item => {
       this.cartService.updateQuantityInProducts(item.product.id, -item.quantity);
       console.log('in orders service while creating new order: ',item.product);
-      
-      this.inventoryService.decreaseStock(item.product.categoryId, item.product.id);
+      for(let i = 1; i<= item.quantity; i++){
+        this.inventoryService.decreaseStock(item.product.categoryId, item.product.id);
+      }
     })
     this.saveOrders();
   }

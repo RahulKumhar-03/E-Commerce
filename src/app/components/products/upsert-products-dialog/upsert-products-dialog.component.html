@@ -62,7 +62,7 @@
         }
 
         <mat-form-field>
-            <mat-label>Select Product Images</mat-label>
+            <mat-label>Add Product Image Url</mat-label>
             <input matInput placeholder="Enter the Image Url" formControlName="productImages">
         </mat-form-field>
         @if(productForm.get('productImages')?.invalid && (productForm.get('productImages')?.dirty || productForm.get('productImages')?.touched)){
@@ -70,9 +70,6 @@
                 <div class="error-message">Product Image is required</div>
             }
         }
-        <div style="margin-top: 10px;">
-            <button mat-button (click)="addImageUrl()">Add Image URL</button>
-        </div>
 
         <div style="margin-top: 5px;">
             <button mat-button [disabled]="productForm.invalid" type="submit">

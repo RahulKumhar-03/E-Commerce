@@ -8,5 +8,5 @@ export interface Products {
     quantity: number;
     categoryId: number;
     review: ProductsReview[];
-    productsImages: string[];
+    productsImages: string;
 }

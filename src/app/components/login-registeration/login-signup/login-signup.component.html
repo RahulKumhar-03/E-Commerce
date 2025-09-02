@@ -76,6 +76,9 @@
                     @if(signUpForm.get('email')?.errors?.['required']){
                         <div class="error-message">User Email is required</div>
                     }
+                    @if(signUpForm.get('email')?.errors?.['email']){
+                        <div class="error-message">Please Enter Valid Email-Id</div>
+                    }
                 }
 
                 <mat-form-field>
