@@ -26,7 +26,7 @@ export class UpsertInventoryDialogComponent {
       const newCategory = {
         categoryName: this.inventoryForm.value.categoryName,
       }
-      this.dialogRef.close(newCategory);
+      this.dialogRef.close(newCategory.categoryName);
     }
   }
 

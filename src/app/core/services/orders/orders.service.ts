@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Orders } from '../../interfaces/orders.interface';
 import { Products } from '../../interfaces/products.interface';
 import { Cart } from '../../interfaces/cart.interface';
+import { CartService } from '../cart/cart.service';
+import { InventoryService } from '../inventory/inventory.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,7 @@ import { Cart } from '../../interfaces/cart.interface';
 export class OrdersService {
   public orders: Orders[] = [];
 
-  constructor() {
+  constructor(private cartService: CartService, private inventoryService: InventoryService) {
     this.orders = this.loadOrders();
   }
 
@@ -37,8 +39,13 @@ export class OrdersService {
       totalPrice: cartItems.reduce((sum, item) => sum + item.product.price * (item.quantity || 1), 0),
       date: new Date(),
     };
-
     this.orders.push(newOrder);
+    cartItems.map(item => {
+      this.cartService.updateQuantityInProducts(item.product.id, -item.quantity);
+      console.log('in orders service while creating new order: ',item.product);
+      
+      this.inventoryService.decreaseStock(item.product.categoryId, item.product.id);
+    })
     this.saveOrders();
   }
 

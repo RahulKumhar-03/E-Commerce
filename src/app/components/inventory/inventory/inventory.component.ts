@@ -6,10 +6,11 @@ import { UpsertInventoryDialogComponent } from '../upsert-inventory-dialog/upser
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-inventory',
-  imports: [MatDialogModule, MatCardModule, MatListModule, MatIconModule],
+  imports: [MatDialogModule, MatCardModule, MatListModule, MatIconModule, MatButtonModule],
   templateUrl: './inventory.component.html',
   styleUrl: './inventory.component.scss'
 })
@@ -33,7 +34,7 @@ export class InventoryComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(data => {
       if(data){
-        this.inventoryService.addCategory(data.name);
+        this.inventoryService.addCategory(data);
         this.loadInventory();
       }
     })

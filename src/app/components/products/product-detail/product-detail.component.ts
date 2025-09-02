@@ -19,10 +19,10 @@ import { MatBadgeModule } from '@angular/material/badge';
 })
 export class ProductDetailComponent implements OnInit {
   public cartItemCount: number = 0;
-  public curentUser: User = JSON.parse(localStorage.getItem('currentUser') || '{}');
+  public currentUser: User = JSON.parse(localStorage.getItem('currentUser') || '{}');
   public product!: Products;
 
-  constructor(private router: Router, private cartService: CartService){
+  constructor(private router: Router, public cartService: CartService){
     this.product = this.router.getCurrentNavigation()?.extras.state?.['product'];
   }
 
@@ -40,5 +40,10 @@ export class ProductDetailComponent implements OnInit {
       this.product.quantity -= 1;
       this.updateCartCount();
     }
+  }
+
+  public removeFromCart(product: Products){
+    this.cartService.removeOneProduct(product);
+    this.updateCartCount();
   }
 }

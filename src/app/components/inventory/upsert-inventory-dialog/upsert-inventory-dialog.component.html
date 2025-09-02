@@ -3,9 +3,13 @@
     <form [formGroup]="inventoryForm" (submit)="submitInventoryForm()">
         <mat-form-field>
             <mat-label>Enter the category name</mat-label>
-            <input matInput placeholder="Category Name" formControlName="categoryName">
+            <input type="text" matInput placeholder="Category Name" formControlName="categoryName">
         </mat-form-field>
-
+        @if(inventoryForm.get('categoryName')?.invalid && (inventoryForm.get('categoryName')?.dirty || inventoryForm.get('categoryName')?.touched)){
+            @if(inventoryForm.get('categoryName')?.errors?.['required']){
+                <div>Category Name is required</div>
+            }
+        }
         <div style="margin-top: 5px;">
             <button mat-button [disabled]="inventoryForm.invalid" type="submit">
                 Submit

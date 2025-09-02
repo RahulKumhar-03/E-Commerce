@@ -66,7 +66,20 @@ export class CartService {
     this.saveCurrentUser(this.currentUser);
   }
 
-  clearCart(): void {
+  public removeOneProduct(product: Products){
+    if(!this.currentUser) return;
+
+    const cartProductIndex = this.currentUser.cart.findIndex(item => item.product.id === product.id);
+    if(cartProductIndex !== -1){
+      const cartProduct = this.currentUser.cart[cartProductIndex];
+      this.inventoryService.increaseStock(cartProduct.product.categoryId, cartProduct.product.id);
+      this.updateQuantityInProducts(cartProduct.product.id, +1);
+      this.currentUser.cart.splice(cartProductIndex, 1);
+    }
+    this.saveCurrentUser(this.currentUser);
+  }
+
+  public clearCart(): void {
     if (!this.currentUser) return;
 
     this.currentUser.cart.forEach(item => {
@@ -80,11 +93,11 @@ export class CartService {
     this.saveCurrentUser(this.currentUser);
   }
 
-  getCartProducts(): Cart[] {
+  public getCartProducts(): Cart[] {
     return this.currentUser ? this.currentUser.cart : [];
   }
 
-  getCartQuantity(): number {
+  public getCartQuantity(): number {
     return this.getCartProducts()?.reduce((sum, item) => sum + item.quantity, 0);
   }
 }

@@ -30,13 +30,13 @@ export class CartComponent implements OnInit {
   public placeOrder(){
     const user: User = JSON.parse(localStorage.getItem('currentUser') || 'null');
     if(user){
-      this.orderService.createNewOrder(user.id,user.name, this.cartItems);
+      this.orderService.createNewOrder(user.id, user.name, this.cartItems);
       this.cartService.clearCart();
       this.loadCartProducts();
       alert('Order Placed Successfully.');
     }
     else {
-      alert('No User Logged In. Please Log in.');
+      alert('User not logged In. Please Log in.');
     }
   }
 

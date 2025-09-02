@@ -11,7 +11,6 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { ProductsCategory } from '../../../core/interfaces/products-category.interface';
 
 @Component({
   selector: 'app-products-dashboard',
@@ -20,12 +19,11 @@ import { ProductsCategory } from '../../../core/interfaces/products-category.int
   styleUrl: './products-dashboard.component.scss'
 })
 export class ProductsDashboardComponent implements OnInit, AfterViewInit {
-  public categories: ProductsCategory[] = [];
   public dataSource = new MatTableDataSource<Products>();
   public displayedColumns: string[] = ['productId', 'productName', 'description', 'price', 'categoryId', 'action'];
   public sortOption: string = 'None';
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatPaginator) paginator1!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private dialog: MatDialog, private productService: ProductService, private snackBar: MatSnackBar){}
@@ -35,7 +33,7 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.paginator1;
     this.dataSource.sort = this.sort;
   }
 
@@ -47,18 +45,6 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
         }
       }
     })
-  }
-
-  public applySort(){
-    if(this.sortOption === 'price'){
-      this.dataSource.data = [...this.dataSource.data.sort((a,b) => a.price - b.price)];
-    } 
-    else if(this.sortOption === 'name'){
-      this.dataSource.data = [...this.dataSource.data.sort((a,b) => a.name.localeCompare(b.name))];
-    }
-    else {
-      this.dataSource.data = [...this.dataSource.data.sort((a,b) => a.id - b.id)];
-    }
   }
 
   public openProductDialog(productData?: Products){

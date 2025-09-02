@@ -14,9 +14,9 @@ export class InventoryService {
    }
 
   public loadInventory(): Inventory {
-    const stored = localStorage.getItem('inventory');
-    if (stored) {
-      return JSON.parse(stored);
+    const inventory = localStorage.getItem('inventory');
+    if (inventory) {
+      return JSON.parse(inventory);
     }
 
     const initialInventory: Inventory = { category: [] };
@@ -61,7 +61,6 @@ export class InventoryService {
   public addProductToCategory(categoryId: number, product: Products): void {
     const category = this.inventory.category.find(c => c.categoryId === categoryId);
     if (category) {
-
       const productExists = category.products.find(p => p.id === product.id);
       if(productExists){
         productExists.quantity += product.quantity;
@@ -75,9 +74,10 @@ export class InventoryService {
   }
 
   public  decreaseStock(categoryId: number, productId: number): void {
-    const category = this.inventory.category?.find(c => c.categoryId === categoryId);
+    const category = this.inventory.category.find(c => c.categoryId === categoryId);
     const product = category?.products.find(p => p.id === productId);
-
+    console.log(product);
+    
     if (product && product.quantity > 0) {
       product.quantity -= 1;
       this.saveInventoryData();

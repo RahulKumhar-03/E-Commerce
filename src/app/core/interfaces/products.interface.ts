@@ -1,4 +1,3 @@
-import { ProductsCategory } from "./products-category.interface";
 import { ProductsReview } from "./products-review.interface";
 
 export interface Products {

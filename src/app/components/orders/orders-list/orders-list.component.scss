@@ -1,0 +1,9 @@
+.expand-list{
+    height: 20px;
+    transition: height 0.3s ease;
+}
+
+.expand-list:hover{
+    overflow-y: auto;
+    height: 100px
+}
