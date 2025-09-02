@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { User } from '../../../core/interfaces/user.interface';
 import { Products } from '../../../core/interfaces/products.interface';
@@ -17,15 +17,14 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './upsert-reviews-dialog.component.scss'
 })
 export class UpsertReviewsDialogComponent {
-  
+  public currentUser: User = JSON.parse(localStorage.getItem('currentUser') || '{}');
   public users: User[] = JSON.parse(localStorage.getItem('users') || '[]');
-  public products: Products[] = JSON.parse(localStorage.getItem('allProducts') || '[]');
   public reviewForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<UpsertReviewsDialogComponent>, private service: ReviewService){
+  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<UpsertReviewsDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: Products, private service: ReviewService){
     this.reviewForm = this.fb.group({
-      userId: [null, Validators.required],
-      productId:[null, Validators.required],
+      userId: [this.currentUser.id, Validators.required],
+      productId:[data.id, Validators.required],
       comment:['', Validators.required],
       reviewStar: [0, Validators.required],
     })
@@ -35,8 +34,8 @@ export class UpsertReviewsDialogComponent {
     if(this.reviewForm.valid){
       const newReview: ProductsReview = {
         id: this.service.getNextReviewId(),
-        userId: this.reviewForm.value.userId,
-        productId: this.reviewForm.value.productId,
+        userId: this.currentUser.id,
+        productId: this.data.id,
         comment: this.reviewForm.value.comment,
         reviewStar: this.reviewForm.value.reviewStar
       }

@@ -11,6 +11,8 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { InventoryService } from '../../../core/services/inventory/inventory.service';
+import { ProductsCategory } from '../../../core/interfaces/products-category.interface';
 
 @Component({
   selector: 'app-products-dashboard',
@@ -19,6 +21,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './products-dashboard.component.scss'
 })
 export class ProductsDashboardComponent implements OnInit, AfterViewInit {
+  public categories: ProductsCategory[] = [];
   public dataSource = new MatTableDataSource<Products>();
   public displayedColumns: string[] = ['productId', 'productName', 'description', 'price', 'categoryId', 'action'];
   public sortOption: string = 'None';
@@ -26,10 +29,11 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator1!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private dialog: MatDialog, private productService: ProductService, private snackBar: MatSnackBar){}
+  constructor(private dialog: MatDialog, private productService: ProductService, private snackBar: MatSnackBar, private inventoryService: InventoryService){}
 
   ngOnInit():void{
     this.loadProducts();
+    this.loadCategory();
   }
 
   ngAfterViewInit(): void {
@@ -45,6 +49,14 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
         }
       }
     })
+  }
+
+  public loadCategory(){
+    this.categories = this.inventoryService.getInventory().category;
+  }
+
+  public getCategoryName(categoryId: number):string{
+    return this.categories.find(c => c.categoryId === categoryId)?.categoryName || '';
   }
 
   public openProductDialog(productData?: Products){
@@ -83,9 +95,9 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
     })
   }
 
-  public deleteProduct(productId: number){
+  public deleteProduct(categoryId:number ,productId: number){
     if(confirm('Are You Sure, you want to delete product?')){
-      this.productService.deleteProduct(productId).subscribe({
+      this.productService.deleteProduct(categoryId, productId).subscribe({
         next: (res) => {
           if(res){
             this.snackBar.open('Product Deleted.','Undo',{ duration: 3000 });

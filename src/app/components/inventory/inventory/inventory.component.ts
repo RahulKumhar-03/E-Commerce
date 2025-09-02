@@ -41,7 +41,9 @@ export class InventoryComponent implements OnInit {
   }
 
   public deleteCategory(categoryId: number){
+    if(confirm('Are You Sure? You want to Delete this Category?')){
     this.inventoryService.deleteCategory(categoryId);
     this.loadInventory();
+    }
   }
 }

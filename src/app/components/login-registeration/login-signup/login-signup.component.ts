@@ -19,7 +19,6 @@ export class LoginSignupComponent {
   public currentUser: string = 'currentUser';
   public loginForm: FormGroup;
   public signUpForm: FormGroup;
-  id = signal(0);
 
   constructor(private fb: FormBuilder, private authService: LoginRegisterService, private snackBar: MatSnackBar, private router: Router){
     this.loginForm = this.fb.group({

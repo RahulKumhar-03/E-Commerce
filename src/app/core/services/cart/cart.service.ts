@@ -8,12 +8,12 @@ import { InventoryService } from '../inventory/inventory.service';
   providedIn: 'root'
 })
 export class CartService {
-  private currentUser: User | null = this.getCurrentUser();
+  private currentUser: User = this.getCurrentUser();
 
   constructor(private inventoryService: InventoryService) { }
 
-  public getCurrentUser(): User | null {
-    return JSON.parse(localStorage.getItem('currentUser') || 'null');
+  public getCurrentUser(): User {
+    return JSON.parse(localStorage.getItem('currentUser') || '{}');
   }
 
   public saveCurrentUser(user: User){
@@ -29,6 +29,7 @@ export class CartService {
       if (p.id === productId) {
         return { ...p, quantity: p.quantity + change };
       }
+
       return p;
     });
     localStorage.setItem('allProducts', JSON.stringify(allProducts));
@@ -37,7 +38,7 @@ export class CartService {
   public addProductToCart(product: Products): void {
     if (!this.currentUser) return;
 
-    const cartProduct = this.currentUser.cart.find(item => item.product.id === product.id);
+    const cartProduct = this.currentUser.cart?.find(item => item.product.id === product.id);
     if (cartProduct) {
       cartProduct.quantity += 1;
     } else {
@@ -70,12 +71,14 @@ export class CartService {
     if(!this.currentUser) return;
 
     const cartProductIndex = this.currentUser.cart.findIndex(item => item.product.id === product.id);
+    
     if(cartProductIndex !== -1){
       const cartProduct = this.currentUser.cart[cartProductIndex];
       this.inventoryService.increaseStock(cartProduct.product.categoryId, cartProduct.product.id);
       this.updateQuantityInProducts(cartProduct.product.id, +1);
-      this.currentUser.cart.splice(cartProductIndex, 1);
+      cartProduct.quantity -= 1;
     }
+    
     this.saveCurrentUser(this.currentUser);
   }
 

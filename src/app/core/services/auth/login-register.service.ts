@@ -8,26 +8,28 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class LoginRegisterService {
-  public _isLoggedIn = signal<boolean>(false);
+  public _isLoggedIn = signal<boolean>(JSON.parse(localStorage.getItem('isLoggedIn') || 'false'));
   public isLoggedIn = computed(() => this._isLoggedIn());
-  public prevUserId = signal(0);
   public router = inject(Router);
 
   constructor() { }
 
   public generateId(): number{
-    this.prevUserId.update(val => val + 1);
-    return this.prevUserId();
+    let allUsers = JSON.parse(localStorage.getItem('users') || '[]');
+    return allUsers.length + 1;
   }
 
   public getAllUsers():Observable<User[]>{
-    let data = localStorage.getItem('users');
-    return of(data ? JSON.parse(data) as User[] : []);
+    let allUsers = localStorage.getItem('users');
+    return of(allUsers ? JSON.parse(allUsers) as User[] : []);
   }
 
   public logout(){
     localStorage.removeItem('currentUser');
+    localStorage.setItem('isLoggedIn', JSON.stringify(false));
     this._isLoggedIn.set(false);
+    console.log('in logout function call',this._isLoggedIn());
+    
     this.router.navigate(['login'])
   }
 
@@ -35,7 +37,9 @@ export class LoginRegisterService {
     const allUsers = JSON.parse(localStorage.getItem('users') || '[]') as User[];
     const user = allUsers.find((user => user.email === userCredentials.email && user.password === userCredentials.password)) as User;
     localStorage.setItem('currentUser',JSON.stringify(user));
+    localStorage.setItem('isLoggedIn', JSON.stringify(true));
     this._isLoggedIn.set(true);
+    console.log('in login function call',this._isLoggedIn());
     return of(user);
   }
 
@@ -48,18 +52,14 @@ export class LoginRegisterService {
     users.push(userData);
     localStorage.setItem('users',JSON.stringify(users));
     localStorage.setItem('currentUser',JSON.stringify(userData));
+    localStorage.setItem('isLoggedIn', JSON.stringify(true));
     this._isLoggedIn.set(true);
     return of(userData);
   }
 
   public isAuthenticated(){
     return JSON.parse(localStorage.getItem('currentUser') || '{}')
-  }
-
-  public userIsPresent(){
-    if(JSON.parse(localStorage.getItem('currentUser') || '{}')){
-      this._isLoggedIn.set(true);
-    }
+    
   }
 }
 

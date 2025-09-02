@@ -19,13 +19,13 @@
 
             <mat-card-content style="justify-items: center;">
                 <div>
-                    <img class="product-images" [src]="product.productsImages" alt="Product Image" class="product-image">
+                    <img style="width: 350px; height: 350px;" class="product-images" [src]="product.productsImages" alt="Product Image" class="product-image">
                 </div>
                 <p>Spec: {{ product.description }}</p>
             </mat-card-content>
 
             <mat-card-footer style="margin: 10px;">
-                <div style="display: flex; flex-direction: row; column-gap: 5px;">
+                <div style="display: flex; flex-direction: row; column-gap: 5px; align-items: center;">
                     <button mat-icon-button (click)="removeFromCart(product)"><mat-icon>remove</mat-icon></button>
                     <h4 style="font-size: 15px;">{{ cartItemCount }}</h4>
                     <button mat-icon-button (click)="addToCart()"><mat-icon>add</mat-icon></button>
@@ -35,6 +35,6 @@
     </div>
 
     <div>
-        <app-reviews-list></app-reviews-list>
+        <app-reviews-list [product]="product"></app-reviews-list>
     </div>
 </div>

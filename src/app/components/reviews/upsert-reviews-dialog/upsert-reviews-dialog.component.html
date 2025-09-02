@@ -3,12 +3,8 @@
     
     <form [formGroup]="reviewForm" (submit)="submitReviewForm()" style="display: flex; flex-direction: column; margin: auto; width: 80%; padding: 20px 0;">
         <mat-form-field>
-            <mat-label>Select User ID</mat-label>
-            <mat-select formControlName="userId">
-                @for(user of users; track user.id){
-                    <mat-option [value]="user.id">{{user.id}}-{{user.name}}</mat-option>
-                }
-            </mat-select>
+            <mat-label>User ID</mat-label>
+            <input matInput placeholder="Enter the User ID" formControlName="userId" [disabled]="true">
         </mat-form-field>
         @if(reviewForm.get('userId')?.invalid && (reviewForm.get('userId')?.dirty || reviewForm.get('userId')?.touched)){
             @if(reviewForm.get('userId')?.errors?.['required']){
@@ -17,12 +13,8 @@
         }
 
         <mat-form-field>
-            <mat-label>Select Product ID</mat-label>
-            <mat-select formControlName="productId">
-                @for(product of products; track product.id){
-                    <mat-option [value]="product.id">{{product.id}}-{{product.name}}</mat-option>
-                }
-            </mat-select>
+            <mat-label>Product ID</mat-label>
+            <input matInput placeholder="Enter the Product ID" formControlName="productId" [disabled]="true">
         </mat-form-field>
         @if(reviewForm.get('productId')?.invalid && (reviewForm.get('productId')?.dirty || reviewForm.get('productId')?.touched)){
             @if(reviewForm.get('productId')?.errors?.['required']){

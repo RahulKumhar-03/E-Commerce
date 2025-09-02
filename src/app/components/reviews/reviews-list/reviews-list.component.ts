@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,6 +7,7 @@ import { ReviewService } from '../../../core/services/reviews/review.service';
 import { ProductsReview } from '../../../core/interfaces/products-review.interface';
 import { MatCardModule } from '@angular/material/card';
 import { User } from '../../../core/interfaces/user.interface';
+import { Products } from '../../../core/interfaces/products.interface';
 
 @Component({
   selector: 'app-reviews-list',
@@ -17,6 +18,7 @@ import { User } from '../../../core/interfaces/user.interface';
 export class ReviewsListComponent implements OnInit {
   public currentUser: User = JSON.parse(localStorage.getItem('currentUser') || '{}');
   public reviews: ProductsReview[]= [];
+  @Input() product!: Products;
 
   constructor(private dialog: MatDialog, private service: ReviewService){}
   
@@ -25,12 +27,13 @@ export class ReviewsListComponent implements OnInit {
   }
 
   public loadReviews(){
-    this.reviews = this.service.getReviewsData();
+    this.reviews = this.service.getReviewsData().filter(review => review.productId === this.product.id);
   }
 
   public openReviewDialog(){
     let dialogRef = this.dialog.open(UpsertReviewsDialogComponent,{
       width: '500px',
+      data: this.product
     })
 
     dialogRef.afterClosed().subscribe(data => {

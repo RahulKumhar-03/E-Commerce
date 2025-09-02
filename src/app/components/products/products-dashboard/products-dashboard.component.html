@@ -31,8 +31,10 @@
         </ng-container>
 
         <ng-container matColumnDef="categoryId">
-            <th mat-header-cell *matHeaderCellDef>Category ID</th>
-            <td mat-cell *matCellDef="let element">{{element.categoryId}}</td>
+            <th mat-header-cell *matHeaderCellDef>Category</th>
+            <td mat-cell *matCellDef="let element">
+                {{ getCategoryName(element.categoryId) }}
+            </td>
         </ng-container>
 
         <ng-container matColumnDef="action">
@@ -41,7 +43,7 @@
                 <div style="display: flex; flex-direction: row;">
                     <button mat-icon-button routerLink="/productById" routerLinkActive="active" [state]="{ product: element }"><mat-icon>open_in_new</mat-icon></button>
                     <button style="padding: 0 5px;" mat-icon-button (click)="openProductDialog(element)"><mat-icon>edit</mat-icon></button>
-                    <button mat-icon-button (click)="deleteProduct(element.id)"><mat-icon>delete</mat-icon></button>
+                    <button mat-icon-button (click)="deleteProduct(element.categoryId,element.id)"><mat-icon>delete</mat-icon></button>
                 </div>
             </td>
         </ng-container>
