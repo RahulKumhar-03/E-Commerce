@@ -12,7 +12,7 @@ export const routes: Routes = [
         path:'all-products', loadComponent: () => import('./components/products/products-dashboard/products-dashboard.component').then(m => m.ProductsDashboardComponent), canActivate:[authGuard]
     },
     {
-        path:'productById', loadComponent: () => import('./components/products/product-detail/product-detail.component').then(m => m.ProductDetailComponent)
+        path:'productById', loadComponent: () => import('./components/products/product-detail/product-detail.component').then(m => m.ProductDetailComponent), canActivate:[authGuard]
     },
     {
         path:'goToCart', loadComponent: () => import('./components/cart/cart/cart.component').then(m => m.CartComponent),canActivate:[authGuard]

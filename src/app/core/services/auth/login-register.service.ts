@@ -28,8 +28,6 @@ export class LoginRegisterService {
     localStorage.removeItem('currentUser');
     localStorage.setItem('isLoggedIn', JSON.stringify(false));
     this._isLoggedIn.set(false);
-    console.log('in logout function call',this._isLoggedIn());
-    
     this.router.navigate(['login'])
   }
 

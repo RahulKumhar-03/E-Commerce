@@ -37,7 +37,7 @@
             <mat-label>Select Category ID</mat-label>
             <mat-select formControlName="categoryId">
                 @for(category of categories; track category.categoryName){
-                    <mat-option [value]="category.categoryId">{{category.categoryId}}-{{category.categoryName}}</mat-option>
+                    <mat-option [value]="category.categoryId">{{category.categoryName}}</mat-option>
                 }
             </mat-select>
         </mat-form-field>
@@ -60,8 +60,19 @@
                 <div class="error-message">Product Quantity should be minimum 1.</div>
             }
         }
+        <div>
+            <div formArrayName="productImages" style="display: flex; flex-direction: column;">
+                <mat-label>Image Url</mat-label>
+                @for(url of getImageFromArray().controls;track url ; let i = $index){
+                    <mat-form-field>
+                        <input matInput placeholder="Enter the image Url" [formControlName]="i">
+                    </mat-form-field>
+                }    
+                <button mat-button type="button" (click)="addUrl()">Add Url</button>  
+            </div>
+        </div>
 
-        <mat-form-field>
+        <!-- <mat-form-field>
             <mat-label>Add Product Image Url</mat-label>
             <input matInput placeholder="Enter the Image Url" formControlName="productImages">
         </mat-form-field>
@@ -69,7 +80,7 @@
             @if(productForm.get('productImages')?.errors?.['required']){
                 <div class="error-message">Product Image is required</div>
             }
-        }
+        } -->
 
         <div style="margin-top: 5px;">
             <button mat-button [disabled]="productForm.invalid" type="submit">

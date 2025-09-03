@@ -7,50 +7,79 @@
         </button>
     </div>
 
-    <div style="padding: 15px 40px">
-    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    @if(dataSource.data.length === 0){
+        <div style="margin:10px; justify-items: center;">
+            <h1>No Products Available</h1>
+        </div>
+    }
+    @else{
+        <div style="padding: 15px 40px">
+            <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
-        <ng-container matColumnDef="productId">
-            <th mat-header-cell *matHeaderCellDef>ID</th>
-            <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-        </ng-container>
+                <ng-container matColumnDef="productId">
+                    <th mat-header-cell *matHeaderCellDef>ID</th>
+                    <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+                </ng-container>
 
-        <ng-container matColumnDef="productName">
-            <th mat-header-cell *matHeaderCellDef>Product Name</th>
-            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-        </ng-container>
+                <ng-container matColumnDef="productName">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <div style="display: flex; flex-direction: row; align-items: center;">
+                            Product Name
+                            <button mat-icon-button (click)="toggleProductSearch()"><mat-icon>search</mat-icon></button>
+                        </div>
+                            <div [hidden]="productSearchDisplay">
+                                <mat-form-field>
+                                <input matInput placeholder="Search By Product Name" [value]="searchedProd" (input)="searchByProductName($event)">
+                                </mat-form-field>
+                            </div>
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                </ng-container>
 
-        <ng-container matColumnDef="description">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
-            <td mat-cell *matCellDef="let element">{{ element.description }}</td>
-        </ng-container>
-        
-        <ng-container matColumnDef="price" >
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
-            <td mat-cell *matCellDef="let element">{{ element.price }}</td>
-        </ng-container>
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        <div>
+                            <div style="display: flex; flex-direction: row; align-items: center;">
+                                Description
+                                <button mat-icon-button (click)="toggleDescSearch()"><mat-icon>search</mat-icon></button>
+                            </div>
+                            <div [hidden]="descSearchDisplay">
+                                <mat-form-field (click)="stopPropagation($event)">
+                                    <input matInput placeholder="Search By Product Description" [value]="searchedDesc" (input)="serachByProductDescription($event)">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+                </ng-container>
+                
+                <ng-container matColumnDef="price" >
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
+                    <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+                </ng-container>
 
-        <ng-container matColumnDef="categoryId">
-            <th mat-header-cell *matHeaderCellDef>Category</th>
-            <td mat-cell *matCellDef="let element">
-                {{ getCategoryName(element.categoryId) }}
-            </td>
-        </ng-container>
+                <ng-container matColumnDef="categoryId">
+                    <th mat-header-cell *matHeaderCellDef>Category</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ getCategoryName(element.categoryId) }}
+                    </td>
+                </ng-container>
 
-        <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef>Action</th>
-            <td mat-cell *matCellDef="let element">
-                <div style="display: flex; flex-direction: row;">
-                    <button mat-icon-button routerLink="/productById" routerLinkActive="active" [state]="{ product: element }"><mat-icon>open_in_new</mat-icon></button>
-                    <button style="padding: 0 5px;" mat-icon-button (click)="openProductDialog(element)"><mat-icon>edit</mat-icon></button>
-                    <button mat-icon-button (click)="deleteProduct(element.categoryId,element.id)"><mat-icon>delete</mat-icon></button>
-                </div>
-            </td>
-        </ng-container>
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                    <td mat-cell *matCellDef="let element">
+                        <div style="display: flex; flex-direction: row;">
+                            <button mat-icon-button routerLink="/productById" routerLinkActive="active" [state]="{ product: element, sameCategoryItems: getSameCategoryItems(element.categoryId) }"><mat-icon>open_in_new</mat-icon></button>
+                            <button style="padding: 0 5px;" mat-icon-button (click)="openProductDialog(element)"><mat-icon>edit</mat-icon></button>
+                            <button mat-icon-button (click)="deleteProduct(element.categoryId,element.id)"><mat-icon>delete</mat-icon></button>
+                        </div>
+                    </td>
+                </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-    </div>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+    }
 </div>

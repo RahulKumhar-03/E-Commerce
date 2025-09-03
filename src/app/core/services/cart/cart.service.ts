@@ -8,13 +8,9 @@ import { InventoryService } from '../inventory/inventory.service';
   providedIn: 'root'
 })
 export class CartService {
-  private currentUser: User = this.getCurrentUser();
+  public currentUser: User = JSON.parse(localStorage.getItem('currentUser') || '{}');
 
-  constructor(private inventoryService: InventoryService) { }
-
-  public getCurrentUser(): User {
-    return JSON.parse(localStorage.getItem('currentUser') || '{}');
-  }
+  constructor(private inventoryService: InventoryService) {}
 
   public saveCurrentUser(user: User){
     localStorage.setItem('currentUser', JSON.stringify(user));
@@ -77,6 +73,10 @@ export class CartService {
       this.inventoryService.increaseStock(cartProduct.product.categoryId, cartProduct.product.id);
       this.updateQuantityInProducts(cartProduct.product.id, +1);
       cartProduct.quantity -= 1;
+      if(cartProduct.quantity === 0){
+        this.currentUser.cart = this.currentUser.cart.filter(item => {item.product.id !== cartProduct.product.id
+        })
+      }
     }
     
     this.saveCurrentUser(this.currentUser);
@@ -102,5 +102,11 @@ export class CartService {
 
   public getCartQuantity(): number {
     return this.getCartProducts()?.reduce((sum, item) => sum + item.quantity, 0);
+  }
+
+  public getProductCountInCart(product: Products):number {
+    let cartProduct = this.currentUser.cart.find(item => item.product.id === product.id);
+    
+    return cartProduct?.quantity || 0;
   }
 }

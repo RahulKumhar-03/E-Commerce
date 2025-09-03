@@ -75,7 +75,6 @@ export class InventoryService {
 
   public deleteProductFromCategory(categoryId: number, productId: number){
     const category = this.inventory.category.find(c => c.categoryId === categoryId);
-    console.log('Category: ',category + ' ' + 'ProductID: ',productId);
     
     if(category?.products){
       category.products = category.products.filter(product => product.id !== productId);
@@ -99,10 +98,21 @@ export class InventoryService {
   public increaseStock(categoryId: number, productId: number){
     const category = this.inventory.category?.find(c => c.categoryId === categoryId);
     const product = category?.products.find(p => p.id === productId);
-    if(product && product.quantity > 0){
+    if(product && product.quantity >= 0){
       product.quantity += 1;
       this.saveInventoryData();
     }
+  }
 
+  public updateStock(categoryId: number, productId: number, productQuantity: number){
+    const category = this.inventory.category?.find(c => c.categoryId === categoryId);
+    if (category) {
+      const productExists = category.products.find(p => p.id === productId);
+      if(productExists){
+        productExists.quantity = productQuantity;
+        this.saveInventoryData();
+        return;
+      }
+    }
   }
 }

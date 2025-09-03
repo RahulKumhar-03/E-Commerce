@@ -44,9 +44,12 @@ export class ProductService {
   public updateProduct(updatedProductData: Products):Observable<boolean>{
     let allProducts = JSON.parse(localStorage.getItem('allProducts') || '[]') as Products[];
     let productIndex = allProducts.findIndex(product => product.id === updatedProductData.id);
-    allProducts[productIndex] = updatedProductData;
-    localStorage.setItem('allProducts', JSON.stringify(allProducts));
-    return of(true);
+    if(productIndex !== -1){
+      allProducts[productIndex] = updatedProductData;
+      localStorage.setItem('allProducts', JSON.stringify(allProducts));
+      return of(true);
+    }
+    return of(false);
   }
 
   public deleteProduct(categoryId:number, productId: number):Observable<boolean>{

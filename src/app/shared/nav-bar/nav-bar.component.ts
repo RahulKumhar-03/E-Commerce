@@ -15,5 +15,6 @@ export class NavBarComponent {
 
   public onLogout(){
     this.authService.logout();
+    window.location.reload();
   }
 }

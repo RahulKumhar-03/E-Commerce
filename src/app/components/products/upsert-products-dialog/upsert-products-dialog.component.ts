@@ -1,7 +1,7 @@
 import { Component, inject, Inject, OnInit, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Products } from '../../../core/interfaces/products.interface';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, ValueChangeEvent } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators, ValueChangeEvent } from '@angular/forms';
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -9,10 +9,11 @@ import { ProductsCategory } from '../../../core/interfaces/products-category.int
 import { MatSelectModule } from '@angular/material/select'
 import { ProductService } from '../../../core/services/products/product.service';
 import { InventoryService } from '../../../core/services/inventory/inventory.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-upsert-products-dialog',
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule],
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatIconModule],
   templateUrl: './upsert-products-dialog.component.html',
   styleUrl: './upsert-products-dialog.component.scss'
 })
@@ -29,13 +30,15 @@ export class UpsertProductsDialogComponent implements OnInit {
       categoryId:[null, Validators.required],
       description: ['', Validators.required],
       price: [500, Validators.required],
-      productImages: ['', Validators.required],
+      productImages: this.fb.array([]),
       quantity: [1, Validators.required],
     });
   }
 
   ngOnInit():void{
     if(this.data){
+      console.log('in ng oninit: ',this.data.productsImages);
+
       this.service.isEditting.set(true);
       this.productForm.patchValue({
         id: this.data.id,
@@ -53,18 +56,28 @@ export class UpsertProductsDialogComponent implements OnInit {
   public loadCategories(){
     this.categories = this.inventoryService.getInventory().category || [];
   }
+
+  public getImageFromArray(): FormArray {
+    return this.productForm.get('productImages') as FormArray
+  }
+
+  public addUrl(){
+    this.getImageFromArray().push(this.fb.control(''));
+  }
   
   public submitProductForm(){
     if(this.productForm.valid){
 
       if(this.service.isEditting() && this.data.id){
+        console.log('before sending updated product: ',this.productForm.value.productImages);
+        
         const updatedProductData: Products = {
           id: this.data.id,
           name: this.productForm.value.name,
           description: this.productForm.value.description,
           price: this.productForm.value.price,
           categoryId: this.data.categoryId,
-          productsImages: this.productForm.value.productImages,
+          productsImages: this.data.productsImages,
           review: [],
           quantity: this.productForm.value.quantity,
         };
