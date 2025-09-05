@@ -8,10 +8,12 @@ import { ProductsReview } from '../../../core/interfaces/products-review.interfa
 import { MatCardModule } from '@angular/material/card';
 import { User } from '../../../core/interfaces/user.interface';
 import { Products } from '../../../core/interfaces/products.interface';
+import { NgxStarsModule} from 'ngx-stars'
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-reviews-list',
-  imports: [MatIconModule, MatButtonModule, MatDialogModule, MatCardModule],
+  imports: [FormsModule, MatIconModule, MatButtonModule, MatDialogModule, MatCardModule, NgxStarsModule],
   templateUrl: './reviews-list.component.html',
   styleUrl: './reviews-list.component.scss'
 })

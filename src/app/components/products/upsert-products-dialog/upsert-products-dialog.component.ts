@@ -30,15 +30,13 @@ export class UpsertProductsDialogComponent implements OnInit {
       categoryId:[null, Validators.required],
       description: ['', Validators.required],
       price: [500, Validators.required],
-      productImages: this.fb.array([]),
-      quantity: [1, Validators.required],
+      productImages: this.fb.array([], Validators.required),
+      quantity: [0, [Validators.required, Validators.min(0)]],
     });
   }
 
   ngOnInit():void{
     if(this.data){
-      console.log('in ng oninit: ',this.data.productsImages);
-
       this.service.isEditting.set(true);
       this.productForm.patchValue({
         id: this.data.id,
@@ -46,11 +44,19 @@ export class UpsertProductsDialogComponent implements OnInit {
         description: this.data.description,
         categoryId: this.data.categoryId,
         price: this.data.price,
-        productImages: this.data.productsImages,
+        productImages: this.populateProductImagesForEdit(this.data.productsImages),
         quantity: this.data.quantity,
       })
     }
+    
     this.loadCategories();
+  }
+
+  public populateProductImagesForEdit(data: string[]){
+    const formArray = this.productForm.get('productImages') as FormArray;
+    formArray.clear();
+
+    data.forEach(imageUrl => formArray.push(this.fb.control(imageUrl)))
   }
 
   public loadCategories(){
@@ -62,40 +68,40 @@ export class UpsertProductsDialogComponent implements OnInit {
   }
 
   public addUrl(){
-    this.getImageFromArray().push(this.fb.control(''));
+    this.getImageFromArray().push(this.fb.control('', Validators.required));
   }
   
   public submitProductForm(){
     if(this.productForm.valid){
 
       if(this.service.isEditting() && this.data.id){
-        console.log('before sending updated product: ',this.productForm.value.productImages);
-        
         const updatedProductData: Products = {
           id: this.data.id,
           name: this.productForm.value.name,
           description: this.productForm.value.description,
           price: this.productForm.value.price,
           categoryId: this.data.categoryId,
-          productsImages: this.data.productsImages,
+          productsImages: this.productForm.value.productImages,
           review: [],
           quantity: this.productForm.value.quantity,
         };
+
         this.inventoryService.addProductToCategory(updatedProductData.categoryId, updatedProductData);
         this.dialogRef.close(updatedProductData);
       }
 
       else {
         const newProductData: Products = {
-        id: this.service.generateId(),
-        name: this.productForm.value.name,
-        description: this.productForm.value.description,
-        price: this.productForm.value.price,
-        categoryId: this.productForm.value.categoryId,
-        productsImages: this.productForm.value.productImages,
-        review: [],
-        quantity: this.productForm.value.quantity,
-      };
+          id: this.service.generateId(),
+          name: this.productForm.value.name,
+          description: this.productForm.value.description,
+          price: this.productForm.value.price,
+          categoryId: this.productForm.value.categoryId,
+          productsImages: this.productForm.value.productImages,
+          review: [],
+          quantity: this.productForm.value.quantity,
+        };
+
         this.inventoryService.addProductToCategory(newProductData.categoryId, newProductData);
         this.dialogRef.close(newProductData);
       }

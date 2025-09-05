@@ -30,7 +30,10 @@ export class CartComponent implements OnInit {
   public placeOrder(){
     const user: User = JSON.parse(localStorage.getItem('currentUser') || 'null');
     if(user){
-      this.orderService.createNewOrder(user.id, user.name, this.cartItems);
+      console.log(this.cartItems.length);
+      for(let i=0; i<this.cartItems.length; i++){
+        this.orderService.createNewOrder(user.id, user.name, this.cartItems[i]);
+      }
       this.cartService.clearCart();
       this.loadCartProducts();
       alert('Order Placed Successfully.');

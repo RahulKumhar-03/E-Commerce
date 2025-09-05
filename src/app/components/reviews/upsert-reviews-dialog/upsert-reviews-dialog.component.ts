@@ -18,13 +18,14 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class UpsertReviewsDialogComponent {
   public currentUser: User = JSON.parse(localStorage.getItem('currentUser') || '{}');
+  public isDisabled: boolean = true;
   public users: User[] = JSON.parse(localStorage.getItem('users') || '[]');
   public reviewForm: FormGroup;
 
   constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<UpsertReviewsDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: Products, private service: ReviewService){
     this.reviewForm = this.fb.group({
-      userId: [this.currentUser.id, Validators.required],
-      productId:[data.id, Validators.required],
+      userId: [{value:this.currentUser.id , disabled: true}],
+      productId:[{value: data.id, disabled: true}],
       comment:['', Validators.required],
       reviewStar: [0, Validators.required],
     })

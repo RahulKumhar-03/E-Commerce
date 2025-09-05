@@ -4,17 +4,15 @@
     <form [formGroup]="reviewForm" (submit)="submitReviewForm()" style="display: flex; flex-direction: column; margin: auto; width: 80%; padding: 20px 0;">
         <mat-form-field>
             <mat-label>User ID</mat-label>
-            <input matInput placeholder="Enter the User ID" formControlName="userId" [disabled]="true">
+            <input matInput placeholder="Enter the User ID" formControlName="userId" [disabled]="isDisabled">
+            <mat-hint>Input Disabled.</mat-hint>
         </mat-form-field>
-        @if(reviewForm.get('userId')?.invalid && (reviewForm.get('userId')?.dirty || reviewForm.get('userId')?.touched)){
-            @if(reviewForm.get('userId')?.errors?.['required']){
-                <div class="error-message">User is required</div>
-            }
-        }
+        
 
         <mat-form-field>
             <mat-label>Product ID</mat-label>
-            <input matInput placeholder="Enter the Product ID" formControlName="productId" [disabled]="true">
+            <input matInput placeholder="Enter the Product ID" formControlName="productId" [disabled]="isDisabled">
+            <mat-hint>Input Disabled.</mat-hint>
         </mat-form-field>
         @if(reviewForm.get('productId')?.invalid && (reviewForm.get('productId')?.dirty || reviewForm.get('productId')?.touched)){
             @if(reviewForm.get('productId')?.errors?.['required']){
@@ -34,15 +32,19 @@
 
         <mat-form-field>
             <mat-label>Product Rating out of 5</mat-label>
-            <input matInput [max]="5" placeholder="Enter the review you want to give." formControlName="reviewStar">
+            <input matInput type="number" min="0" max="5" placeholder="Enter the review you want to give." formControlName="reviewStar">
         </mat-form-field>
         @if(reviewForm.get('reviewStar')?.invalid && (reviewForm.get('reviewStar')?.dirty || reviewForm.get('reviewStar')?.touched)){
-            @if(reviewForm.get('')?.errors?.['required']){
+            @if(reviewForm.get('reviewStar')?.errors?.['required']){
                 <div class="error-message">Product Review is required</div>
             }
 
+            @if(reviewForm.get('reviewStar')?.errors?.['min']){
+                <div class="error-message">Product Review cannot be less than 0.</div>
+            }
+
             @if(reviewForm.get('reviewStar')?.errors?.['max']){
-                <div class="error-message">Product Review can be maximum 5</div>
+                <div class="error-message">Product Review can be maximum 5.</div>
             }
         }
 

@@ -89,7 +89,7 @@ export class InventoryService {
     const category = this.inventory.category.find(c => c.categoryId === categoryId);
     const product = category?.products.find(p => p.id === productId);
     
-    if (product && product.quantity > 0) {
+    if (product && product.quantity >= 0) {
       product.quantity -= 1;
       this.saveInventoryData();
     }

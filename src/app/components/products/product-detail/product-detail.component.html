@@ -12,16 +12,16 @@
         <mat-card class="product-card">
             <mat-card-header>
                 <div style="display: flex; flex-direction: row; width: 100%; justify-content: space-between; margin: 10px 20px;">
-                    <mat-card-title>{{ product.name }}</mat-card-title>
-                    <mat-card-subtitle>{{ product.price | currency:'INR' }}</mat-card-subtitle>
+                    <mat-card-title>{{ product?.name }}</mat-card-title>
+                    <mat-card-subtitle>{{ product?.price | currency:'INR' }}</mat-card-subtitle>
                 </div>
             </mat-card-header>
 
             <mat-card-content style="justify-items: center;">
                 <div>
-                    <img style="width: 350px; height: 350px;" class="product-images" [src]="currentImageUrl" alt="Product Image" class="product-image">
+                    <img style="width: 400px; height: 350px;" class="product-images" [src]="currentImageUrl" alt="Product Image" class="product-image">
                 </div>
-                <p>Spec: {{ product.description }}</p>
+                <p>Spec: {{ product?.description }}</p>
             </mat-card-content>
 
             <mat-card-footer style="margin: 10px;">
@@ -30,7 +30,7 @@
                 }
                 @else{
                     <div style="display: flex; flex-direction: row; column-gap: 5px; align-items: center;">
-                        <button mat-icon-button (click)="removeFromCart(product)"><mat-icon>remove</mat-icon></button>
+                        <button mat-icon-button (click)="removeFromCart(product!)"><mat-icon>remove</mat-icon></button>
                         <h4 style="font-size: 15px;">{{ productCountInCart }}</h4>
                         <button mat-icon-button (click)="addToCart()"><mat-icon>add</mat-icon></button>
                     </div>
@@ -40,28 +40,33 @@
     </div>
 
     <div>
-        <app-reviews-list [product]="product"></app-reviews-list>
+        <app-reviews-list [product]="product!"></app-reviews-list>
     </div>
 
     <h3 style="margin-top: 20px;">Similar Products in Category</h3>
 
     <div style="justify-items: center;">
-        @for(product of otherProductsInCategory; track product.id){
+        @if(otherProductsInCategory.length === 0){
+            <div><h3>No Similar Products Found!</h3></div>
+        }
+        @else{
+        @for(products of otherProductsInCategory; track products.id){
             <div style="display: flex; flex-direction: column; gap: 10px;"></div>
             <mat-card class="example-card" appearance="outlined">
                 <mat-card-header>
                     <div style="display: flex; flex-direction: row; width: 100%; justify-content: space-between;">
-                        <mat-card-title>{{ product.name }}</mat-card-title>
-                        <mat-card-subtitle>{{ product.price | currency:'INR' }}</mat-card-subtitle>
+                        <mat-card-title>{{ products.name }}</mat-card-title>
+                        <mat-card-subtitle>{{ products.price | currency:'INR' }}</mat-card-subtitle>
                     </div>
                 </mat-card-header>
                 <mat-card-content>
-                    <p>{{product.description}}</p>
+                    <p>{{products.description}}</p>
                 </mat-card-content>
                 <mat-card-footer style="padding: 10px;">
-                    <button mat-button routerLink="/productById" routerLinkActive="active" [state]="{ product: product}">Go To Product</button>
+                    <button mat-button [routerLink]="['/all-products', products.id]">Go To Product</button>
                 </mat-card-footer>
             </mat-card>
         }
+    }
     </div>
 </div>

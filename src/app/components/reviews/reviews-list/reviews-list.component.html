@@ -15,7 +15,10 @@
                         <h5>User ID: {{review.userId}}</h5>
                     </div>
                     <div style="padding-bottom: 10px;">
-                        <mat-card-subtitle>Product Rating: {{review.reviewStar}}</mat-card-subtitle>
+                        <mat-card-subtitle>
+                            <ngx-stars [initialStars]="review.reviewStar" color="#FFD700"></ngx-stars>
+        
+                        </mat-card-subtitle>
                     </div>
                 </mat-card-header>
 

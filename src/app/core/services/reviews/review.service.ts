@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ProductsReview } from '../../interfaces/products-review.interface';
-
 @Injectable({
   providedIn: 'root'
 })

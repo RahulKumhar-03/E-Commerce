@@ -15,23 +15,23 @@ import { InventoryService } from '../../../core/services/inventory/inventory.ser
 import { ProductsCategory } from '../../../core/interfaces/products-category.interface';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-products-dashboard',
-  imports: [MatTableModule, MatDialogModule, MatIconModule, MatButtonModule, MatPaginatorModule, MatSortModule, MatSelectModule, RouterLink, RouterLinkActive, MatInputModule, MatFormFieldModule],
+  imports: [FormsModule, MatTableModule, MatSlideToggleModule, MatDialogModule, MatIconModule, MatButtonModule, MatPaginatorModule, MatSortModule, MatSelectModule, RouterLink, RouterLinkActive, MatInputModule, MatFormFieldModule],
   templateUrl: './products-dashboard.component.html',
   styleUrl: './products-dashboard.component.scss'
 })
 export class ProductsDashboardComponent implements OnInit, AfterViewInit {
   public categories: ProductsCategory[] = [];
+  public isChecked: boolean = true;
   public dataSource = new MatTableDataSource<Products>();
-  public descSearchDisplay: boolean = true;
-  public productSearchDisplay: boolean = true;
-  public displayedColumns: string[] = ['productId', 'productName', 'description', 'price', 'categoryId', 'action'];
   public products: Products[] = [];
-  public searchedProd: string = '';
-  public searchedDesc: string = '';
-  public sortOption: string = 'None';
+  public searchedTerm: string = '';
+  public categoryFilterKey: number = 0;
+  public displayedColumns: string[] = ['productId', 'productName', 'description', 'price', 'categoryId', 'quantity', 'action'];
 
   @ViewChild(MatPaginator) productsPaginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -41,6 +41,8 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
   ngOnInit():void{
     this.loadProducts();
     this.loadCategory();
+    // console.log(!this.categoryFilterKey);
+    
   }
 
   ngAfterViewInit(): void {
@@ -48,40 +50,59 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  public toggleProductSearch(){
-    this.productSearchDisplay = !this.productSearchDisplay;
-  }
-
-  public toggleDescSearch(){
-  this.descSearchDisplay = !this.descSearchDisplay;
-  }
-
   public loadProducts(){
     this.productService.getAllProducts().subscribe({
       next:(res) => {
         if(res){
           this.products = res;
-          this.dataSource.data = res;
+          if(this.isChecked){
+            this.dataSource.data = res.filter(item => item.quantity > 0)
+          } else{
+            this.dataSource.data = res.filter(item => item.quantity === 0);
+          }
         }
       }
     })
   }
 
-  public searchByProductName(event: Event){
-    const searchedInput = event.target as HTMLInputElement;
-    this.searchedProd = searchedInput.value;
-    this.dataSource.data = this.products.filter(product => product.name.toLowerCase().includes(this.searchedProd.toLowerCase()));
+  public onCategorySelect(){
+    
+    if(this.categoryFilterKey === 0 && this.isChecked){
+      this.loadProducts();
+      return;
+    }
+    if(this.isChecked){
+      this.dataSource.data = this.products.filter(item => item.categoryId === this.categoryFilterKey && item.quantity > 0);
+    }
+    else {
+      this.dataSource.data = this.products.filter(item => item.categoryId === this.categoryFilterKey);
+    }
   }
 
-  public serachByProductDescription(event: Event){
-    const searchedInput = event.target as HTMLInputElement;
-    this.searchedDesc = searchedInput.value;
-    this.dataSource.data = this.products.filter(product => product.description.toLowerCase().includes(this.searchedDesc.toLowerCase()));
-  } 
-
-  public stopPropagation(event: Event){
-    event.stopPropagation();
+  public sliderToggleChange(){
+    if(this.isChecked){
+      this.dataSource.data = this.products.filter(item => item.quantity > 0);
+    }
+    else {
+      this.dataSource.data = this.products.filter(item => item.quantity === 0);
+    }
   }
+
+  public searchResult(event: Event){
+    this.searchedTerm = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = this.searchedTerm.trim().toLowerCase();
+  }
+
+  // public applyFilter():Products[]{
+    
+  //   return this.products.filter(product => {
+  //     const matchedCategory =!this.categoryFilterKey || product.categoryId === this.categoryFilterKey ;
+      
+  //     const matchedSearch = !this.searchedTerm && product.name.toLowerCase().includes(this.searchedTerm.toLowerCase()) || product.description.toLowerCase().includes(this.searchedTerm.toLowerCase());
+      
+  //     return matchedSearch && matchedCategory
+  //   })
+  // }
 
   public loadCategory(){
     this.categories = this.inventoryService.getInventory().category;
