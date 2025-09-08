@@ -7,7 +7,7 @@
         </mat-form-field>
         @if(inventoryForm.get('categoryName')?.invalid && (inventoryForm.get('categoryName')?.dirty || inventoryForm.get('categoryName')?.touched)){
             @if(inventoryForm.get('categoryName')?.errors?.['required']){
-                <div>Category Name is required</div>
+                <div class="error-message">Category Name is required</div>
             }
         }
         <div style="margin-top: 5px;">

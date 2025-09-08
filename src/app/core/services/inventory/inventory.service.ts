@@ -46,6 +46,13 @@ export class InventoryService {
   }
 
   public deleteCategory(id: number): void {
+    let allProducts:Products[] = JSON.parse(localStorage.getItem('allProducts') || '[]');
+    const productsInCategory = this.inventory.category.find(item => item.categoryId === id)?.products!;
+
+    for(let i=0; i<productsInCategory.length; i++){
+      allProducts = allProducts.filter(product => product.id !== productsInCategory[i].id);
+    }
+    localStorage.setItem('allProducts', JSON.stringify(allProducts));
     this.inventory.category = this.inventory.category.filter(c => c.categoryId !== id);
     this.saveInventoryData();
   }
@@ -78,7 +85,6 @@ export class InventoryService {
     
     if(category?.products){
       category.products = category.products.filter(product => product.id !== productId);
-      console.log('after filtering product',category);
       
       this.saveInventoryData();
       return;

@@ -56,7 +56,7 @@
                 <div class="error-message">Product Quantity is required</div>
             }
             @if(productForm.get('quantity')?.errors?.['min']){
-                <div class="error-message">Product Quantity cannot be less than 0.</div>
+                <div class="error-message">Product Quantity cannot be less than 1.</div>
             }
         }
         <div>
@@ -66,6 +66,11 @@
                     <mat-form-field>
                         <input matInput placeholder="Enter the image Url" [formControlName]="i">
                     </mat-form-field>
+                    @if(productForm.get('i')?.invalid && (productForm.get('i')?.dirty || productForm.get('i')?.touched)){
+                        @if(productForm.get('i')?.errors?.['required']){
+                            <div class="error-message">Image Url is Required.</div>
+                        }
+                    }
                 }    
                 <button mat-button type="button" (click)="addUrl()">Add Url</button>  
             </div>

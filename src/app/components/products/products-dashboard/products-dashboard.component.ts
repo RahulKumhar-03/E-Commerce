@@ -17,10 +17,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { FormsModule } from '@angular/forms';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-products-dashboard',
-  imports: [FormsModule, MatTableModule, MatSlideToggleModule, MatDialogModule, MatIconModule, MatButtonModule, MatPaginatorModule, MatSortModule, MatSelectModule, RouterLink, RouterLinkActive, MatInputModule, MatFormFieldModule],
+  imports: [FormsModule, MatTableModule, MatSlideToggleModule, MatDialogModule, MatIconModule, MatButtonModule, MatPaginatorModule, MatSortModule, MatSelectModule, RouterLink, RouterLinkActive, MatInputModule, MatFormFieldModule, CurrencyPipe],
   templateUrl: './products-dashboard.component.html',
   styleUrl: './products-dashboard.component.scss'
 })
@@ -41,8 +42,6 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
   ngOnInit():void{
     this.loadProducts();
     this.loadCategory();
-    // console.log(!this.categoryFilterKey);
-    
   }
 
   ngAfterViewInit(): void {
@@ -66,16 +65,16 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
   }
 
   public onCategorySelect(){
-    
-    if(this.categoryFilterKey === 0 && this.isChecked){
+    if(this.categoryFilterKey === 0){
       this.loadProducts();
       return;
     }
+    
     if(this.isChecked){
       this.dataSource.data = this.products.filter(item => item.categoryId === this.categoryFilterKey && item.quantity > 0);
     }
     else {
-      this.dataSource.data = this.products.filter(item => item.categoryId === this.categoryFilterKey);
+      this.dataSource.data = this.products.filter(item => item.categoryId === this.categoryFilterKey && item.quantity === 0);
     }
   }
 
@@ -151,18 +150,16 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
   }
 
   public deleteProduct(categoryId:number ,productId: number){
-    if(confirm('Are You Sure, you want to delete product?')){
-      this.productService.deleteProduct(categoryId, productId).subscribe({
-        next: (res) => {
-          if(res){
-            this.snackBar.open('Product Deleted.','Undo',{ duration: 3000 });
-            this.loadProducts();
-          }
-          else {
-            this.snackBar.open('Failed to delete Product!!','Undo',{ duration: 3000 });
-          }
+    this.productService.deleteProduct(categoryId, productId).subscribe({
+      next: (res) => {
+        if(res){
+          this.snackBar.open('Product Deleted.','Undo',{ duration: 3000 });
+          this.loadProducts();
         }
-      })
-    }
+        else {
+          this.snackBar.open('Failed to delete Product!!','Undo',{ duration: 3000 });
+        }
+      }
+    })
   }
 }

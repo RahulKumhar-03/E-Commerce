@@ -32,7 +32,6 @@ export class OrdersService {
   }
 
   public createNewOrder(userId: number, username: string, cartItem: CartItem): void {
-    console.log(cartItem);
     
     const newOrder: Orders = {
       orderId: this.orders.length + 1,
@@ -45,7 +44,6 @@ export class OrdersService {
     };
     this.orders.push(newOrder);
     this.cartService.updateQuantityInProducts(cartItem.product.id, -cartItem.quantity);
-      console.log('in orders service while creating new order: ',cartItem.product);
       for(let i = 1; i<= cartItem.quantity; i++){
         this.inventoryService.decreaseStock(cartItem.product.categoryId, cartItem.product.id);
       }

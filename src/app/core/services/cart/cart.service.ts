@@ -19,11 +19,11 @@ export class CartService {
     localStorage.setItem('users', JSON.stringify(users));
   }
 
-  public updateQuantityInProducts(productId: number, change: number): void {
+  public updateQuantityInProducts(productId: number, changeInQuantity: number): void {
     let allProducts: Products[] = JSON.parse(localStorage.getItem('allProducts') || '[]');
     allProducts = allProducts.map(p => {
       if (p.id === productId) {
-        return { ...p, quantity: p.quantity + change };
+        return { ...p, quantity: p.quantity + changeInQuantity };
       }
 
       return p;

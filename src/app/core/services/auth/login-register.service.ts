@@ -10,9 +10,8 @@ import { Router } from '@angular/router';
 export class LoginRegisterService {
   public _isLoggedIn = signal<boolean>(JSON.parse(localStorage.getItem('isLoggedIn') || 'false'));
   public isLoggedIn = computed(() => this._isLoggedIn());
-  public router = inject(Router);
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   public generateId(): number{
     let allUsers = JSON.parse(localStorage.getItem('users') || '[]');
