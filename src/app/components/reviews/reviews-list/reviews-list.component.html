@@ -10,14 +10,12 @@
         @for(review of reviews; track review.id){
             <mat-card appearance="outlined">
                 <mat-card-header style="display: flex; flex-direction: column;">
-                    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                    <div>
                         <mat-card-title>{{review.comment}}</mat-card-title>
-                        <h5>User ID: {{review.userId}}</h5>
                     </div>
-                    <div style="padding-bottom: 10px;">
+                    <div style="padding: 10px 0px;">
                         <mat-card-subtitle>
                             <ngx-stars [initialStars]="review.reviewStar" color="#FFD700"></ngx-stars>
-        
                         </mat-card-subtitle>
                     </div>
                 </mat-card-header>

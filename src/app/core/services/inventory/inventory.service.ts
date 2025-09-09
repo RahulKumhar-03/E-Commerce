@@ -88,11 +88,14 @@ export class InventoryService {
 
   public deleteProductFromCategory(categoryId: number, productId: number){
     const category = this.inventory.category.find(c => c.categoryId === categoryId);
+    console.log('inside the inventory service');
     
     if(category?.products){
       category.products = category.products.filter(product => product.id !== productId);
       
       this.saveInventoryData();
+      console.log('after deleting product in inventory',this.inventory.category);
+      
       return;
     }
   }

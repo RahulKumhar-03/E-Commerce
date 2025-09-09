@@ -1,7 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Products } from '../../interfaces/products.interface';
 import { InventoryService } from '../inventory/inventory.service';
-import { getMatIconFailedToSanitizeLiteralError } from '@angular/material/icon';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +33,8 @@ export class ProductService {
 
   public createProduct(newProduct: Products):boolean{
     let allProducts = this.getAllProducts();
-    let productExists = allProducts.find(product => product.name === newProduct.name);
+    let productExists:Products | undefined = allProducts.find(product => product.name.toLowerCase() === newProduct.name.toLowerCase() && product.categoryId === newProduct.categoryId);
+    
     if(productExists){
       return false;
     } else {

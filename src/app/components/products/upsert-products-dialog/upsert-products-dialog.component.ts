@@ -1,7 +1,7 @@
 import { Component, inject, Inject, OnInit, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Products } from '../../../core/interfaces/products.interface';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators, ValueChangeEvent } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -86,7 +86,7 @@ export class UpsertProductsDialogComponent implements OnInit {
           quantity: this.productForm.value.quantity,
         };
 
-        this.inventoryService.addProductToCategory(updatedProductData.categoryId, updatedProductData);
+        this.inventoryService.updateStock(updatedProductData.categoryId, updatedProductData.id, updatedProductData.quantity);
         this.dialogRef.close(updatedProductData);
       }
 

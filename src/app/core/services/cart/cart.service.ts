@@ -106,7 +106,15 @@ export class CartService {
 
   public getProductCountInCart(product: Products):number {
     let cartProduct = this.currentUser.cart.find(item => item.product.id === product.id);
-    
     return cartProduct?.quantity || 0;
+  }
+
+  public updateProductInCart(product: Products){
+    this.currentUser.cart.forEach(item => {
+      if(item.product.id === product.id){
+        item.product.price = product.price;
+      }
+    })
+    this.saveCurrentUser(this.currentUser)
   }
 }

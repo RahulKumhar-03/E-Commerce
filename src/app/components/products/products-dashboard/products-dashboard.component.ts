@@ -18,6 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { FormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
+import { CartService } from '../../../core/services/cart/cart.service';
 
 @Component({
   selector: 'app-products-dashboard',
@@ -37,7 +38,7 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) productsPaginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private dialog: MatDialog, private productService: ProductService, private snackBar: MatSnackBar, private inventoryService: InventoryService){}
+  constructor(private dialog: MatDialog, private productService: ProductService, private snackBar: MatSnackBar, private inventoryService: InventoryService, private cartService: CartService){}
 
   ngOnInit():void{
     this.loadProducts();
@@ -113,6 +114,7 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
           if(this.productService.updateProduct(data)){
             this.snackBar.open('Product Updated Successfully.','Undo',{ duration: 3000 });
             this.loadProducts();
+            this.cartService.updateProductInCart(data);
           } else {
             this.snackBar.open('Product Update Failed.','Undo',{ duration: 3000 });
           }
@@ -121,7 +123,7 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
             this.snackBar.open('New Product Created Successfully.','Undo',{ duration: 3000 });
             this.loadProducts();
           } else {
-            this.snackBar.open('New Product Creation Failed.','Undo',{ duration: 3000 });
+            this.snackBar.open('Product Already Exists.','Undo',{ duration: 3000 });
           }
         }
       }
