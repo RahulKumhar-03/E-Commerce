@@ -3,6 +3,7 @@ import { Orders } from '../../interfaces/orders.interface';
 import { CartService } from '../cart/cart.service';
 import { InventoryService } from '../inventory/inventory.service';
 import { CartItem } from '../../interfaces/cartItem.interface';
+import { Cart } from '../../interfaces/cart.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,7 @@ export class OrdersService {
     localStorage.setItem('orders', JSON.stringify(this.orders));
   }
 
-  public createNewOrder(userId: number, username: string, cartItem: CartItem): void {
+  public createNewOrder(userId: number, username: string, cartItem: Cart): void {
     
     const newOrder: Orders = {
       orderId: this.orders.length + 1,

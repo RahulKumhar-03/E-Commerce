@@ -74,7 +74,7 @@ export class UpsertProductsDialogComponent implements OnInit {
   public submitProductForm(){
     if(this.productForm.valid){
 
-      if(this.service.isEditting() && this.data.id){
+      if(this.service.isEditting() && this.data?.id){
         const updatedProductData: Products = {
           id: this.data.id,
           name: this.productForm.value.name,
@@ -101,8 +101,6 @@ export class UpsertProductsDialogComponent implements OnInit {
           review: [],
           quantity: this.productForm.value.quantity,
         };
-
-        this.inventoryService.addProductToCategory(newProductData.categoryId, newProductData);
         this.dialogRef.close(newProductData);
       }
 

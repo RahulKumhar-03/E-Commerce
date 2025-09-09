@@ -7,7 +7,7 @@ import { ProductsCategory } from '../../interfaces/products-category.interface';
   providedIn: 'root'
 })
 export class InventoryService {
-  public inventory!: Inventory;
+  public inventory: Inventory;
 
   constructor() { 
     this.inventory = this.loadInventory();

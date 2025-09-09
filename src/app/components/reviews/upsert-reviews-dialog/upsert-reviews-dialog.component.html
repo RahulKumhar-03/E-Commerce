@@ -26,7 +26,7 @@
         </mat-form-field>
         @if(reviewForm.get('comment')?.invalid && (reviewForm.get('comment')?.dirty || reviewForm.get('comment')?.touched)){
             @if(reviewForm.get('comment')?.errors?.['required']){
-                <div class="error-message">Comment is required</div>
+                <mat-error>Comment is required</mat-error>
             }
         }
 
@@ -36,15 +36,15 @@
         </mat-form-field>
         @if(reviewForm.get('reviewStar')?.invalid && (reviewForm.get('reviewStar')?.dirty || reviewForm.get('reviewStar')?.touched)){
             @if(reviewForm.get('reviewStar')?.errors?.['required']){
-                <div class="error-message">Product Review is required</div>
+                <mat-error>Product Review is required</mat-error>
             }
 
             @if(reviewForm.get('reviewStar')?.errors?.['min']){
-                <div class="error-message">Product Review cannot be less than 0.</div>
+                <mat-error>Product Review cannot be less than 0.</mat-error>
             }
 
             @if(reviewForm.get('reviewStar')?.errors?.['max']){
-                <div class="error-message">Product Review can be maximum 5.</div>
+                <mat-error>Product Review can be maximum 5.</mat-error>
             }
         }
 

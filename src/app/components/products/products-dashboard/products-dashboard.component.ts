@@ -51,8 +51,17 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
   }
 
   public loadProducts(){
-    this.products = this.productService.getAllProducts()
-    this.dataSource.data = this.products;
+    this.products = this.productService.getAllProducts();
+    this.applyFilter();
+    // if(this.isChecked && this.categoryFilterKey !== 0){
+    //   this.products = this.productService.getAllProducts().filter(item => item.quantity > 0 && item.categoryId === this.categoryFilterKey);
+    // }
+    // else if(!this.isChecked && this.categoryFilterKey!== 0){
+    //   this.products = this.productService.getAllProducts().filter(item => item.quantity === 0 && item.categoryId === this.categoryFilterKey)
+    // }
+    // else {
+    //   this.products = this.productService.getAllProducts().filter(item => item.quantity > 0);
+    // }
   }
 
   public onCategorySelect(){
@@ -122,6 +131,7 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
           if(this.productService.createProduct(data)){
             this.snackBar.open('New Product Created Successfully.','Undo',{ duration: 3000 });
             this.loadProducts();
+            this.inventoryService.addProductToCategory(data.categoryId, data);
           } else {
             this.snackBar.open('Product Already Exists.','Undo',{ duration: 3000 });
           }

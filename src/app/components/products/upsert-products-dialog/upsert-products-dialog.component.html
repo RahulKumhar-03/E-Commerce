@@ -7,7 +7,7 @@
         </mat-form-field>
         @if(productForm.get('name')?.invalid && (productForm.get('name')?.dirty || productForm.get('name')?.touched)){
             @if(productForm.get('name')?.errors?.['required']){
-                <div class="error-message">Product Name is required</div>
+                <mat-error>Product Name is required</mat-error>
             }
         }
 
@@ -16,7 +16,7 @@
         </mat-form-field>
         @if(productForm.get('description')?.invalid && (productForm.get('description')?.dirty || productForm.get('description')?.touched)){
             @if(productForm.get('description')?.errors?.['required']){
-                <div class="error-message">Product description is required</div>
+                <mat-error>Product description is required</mat-error>
             }
         }
 
@@ -25,11 +25,11 @@
         </mat-form-field>
         @if(productForm.get('price')?.invalid && (productForm.get('price')?.dirty || productForm.get('price')?.touched)){
             @if(productForm.get('price')?.errors?.['required']){
-                <div class="error-message">Product price is required</div>
+                <mat-error>Product price is required</mat-error>
             }
 
             @if(productForm.get('price')?.errors?.['min']){
-                <div class="error-message">Product price should be minimum Rs.500</div>
+                <mat-error>Product price should be minimum Rs.500</mat-error>
             }
         }
 
@@ -43,7 +43,7 @@
         </mat-form-field>
         @if(productForm.get('categoryId')?.invalid && (productForm.get('categoryId')?.dirty || productForm.get('categoryId')?.touched)){
             @if(productForm.get('categoryId')?.errors?.['required']){
-                <div class="error-message">Product Category is required</div>
+                <mat-error>Product Category is required</mat-error>
             }
         }
 
@@ -53,10 +53,10 @@
         </mat-form-field>
         @if(productForm.get('quantity')?.invalid && (productForm.get('quantity')?.dirty || productForm.get('quantity')?.touched)){
             @if(productForm.get('quantity')?.errors?.['required']){
-                <div class="error-message">Product Quantity is required</div>
+                <mat-error>Product Quantity is required</mat-error>
             }
             @if(productForm.get('quantity')?.errors?.['min']){
-                <div class="error-message">Product Quantity cannot be less than 1.</div>
+                <mat-error>Product Quantity cannot be less than 1.</mat-error>
             }
         }
         <div>
@@ -68,7 +68,7 @@
                     </mat-form-field>
                     @if(productForm.get('i')?.invalid && (productForm.get('i')?.dirty || productForm.get('i')?.touched)){
                         @if(productForm.get('i')?.errors?.['required']){
-                            <div class="error-message">Image Url is Required.</div>
+                            <mat-error>Image Url is Required.</mat-error>
                         }
                     }
                 }    
