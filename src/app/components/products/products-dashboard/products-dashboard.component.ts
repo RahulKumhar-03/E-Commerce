@@ -50,56 +50,20 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
   }
 
   public loadProducts(){
-    this.productService.getAllProducts().subscribe({
-      next:(res) => {
-        if(res){
-          // if(this.isChecked){
-          //   this.products = res.filter(item => item.quantity > 0);
-          // }
-          // else {
-          //   this.products = res.filter(item => item.quantity === 0);
-          // }
-          this.products = res;
-          this.dataSource.data = res;
-          // if(this.isChecked){
-          //   this.dataSource.data = this.products.filter(item => item.quantity > 0)
-          // } else{
-          //   this.dataSource.data = this.products.filter(item => item.quantity === 0);
-          // }
-        }
-      }
-    })
+    this.products = this.productService.getAllProducts()
+    this.dataSource.data = this.products;
   }
 
   public onCategorySelect(){
     this.applyFilter();
-    // if(this.categoryFilterKey === 0){
-    //   this.loadProducts();
-    //   return;
-    // }
-    
-    // if(this.isChecked){
-    //   this.dataSource.data = this.products.filter(item => item.categoryId === this.categoryFilterKey && item.quantity > 0);
-    // }
-    // else {
-    //   this.dataSource.data = this.products.filter(item => item.categoryId === this.categoryFilterKey && item.quantity === 0);
-    // }
   }
 
   public sliderToggleChange(){
     this.applyFilter();
-    // if(this.isChecked){
-    //   this.dataSource.data = this.products.filter(item => item.quantity > 0);
-    // }
-    // else {
-    //   this.dataSource.data = this.products.filter(item => item.quantity === 0);
-    // }
   }
 
   public searchResult(){
     this.applyFilter();
-    // this.searchedTerm = (event.target as HTMLInputElement).value;
-    // this.dataSource.filter = this.searchedTerm.trim().toLowerCase();
   }
 
   public applyFilter(){
@@ -146,42 +110,27 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
     dialog.afterClosed().subscribe(data => {
       if(data){
         if(data.id && this.productService.isEditting()){
-          this.productService.updateProduct(data).subscribe({
-            next: (res) => {
-              if(res){
-                this.loadProducts();
-                this.inventoryService.updateStock(data.categoryId, data.id, data.quantity);
-              }
-            }
-          })
+          if(this.productService.updateProduct(data)){
+            this.snackBar.open('Product Updated Successfully.','Undo',{ duration: 3000 });
+            this.loadProducts();
+          } else {
+            this.snackBar.open('Product Update Failed.','Undo',{ duration: 3000 });
+          }
         } else {
-          this.productService.createProduct(data).subscribe({
-            next: (res) => {
-              if(res){
-                this.snackBar.open('New Product Added Successfully.','Undo',{ duration: 3000 });
-                this.loadProducts();
-              }
-              else {
-                this.snackBar.open('Error while adding new Product!!','Undo',{ duration: 3000 });
-              }
-            }
-          })
+          if(this.productService.createProduct(data)){
+            this.snackBar.open('New Product Created Successfully.','Undo',{ duration: 3000 });
+            this.loadProducts();
+          } else {
+            this.snackBar.open('New Product Creation Failed.','Undo',{ duration: 3000 });
+          }
         }
       }
     })
   }
 
   public deleteProduct(categoryId:number ,productId: number){
-    this.productService.deleteProduct(categoryId, productId).subscribe({
-      next: (res) => {
-        if(res){
-          this.snackBar.open('Product Deleted.','Undo',{ duration: 3000 });
-          this.loadProducts();
-        }
-        else {
-          this.snackBar.open('Failed to delete Product!!','Undo',{ duration: 3000 });
-        }
-      }
-    })
+    this.productService.deleteProduct(categoryId, productId)
+    this.snackBar.open('Product Deleted.','Undo',{ duration: 3000 });
+    this.loadProducts();
   }
 }

@@ -35,14 +35,20 @@ export class InventoryService {
     return lastId;
   }
 
-  public addCategory(name: string): void {
-    const newCategory: ProductsCategory = {
-      categoryId: this.getNextCategoryId(),
-      categoryName: name,
-      products: []
-    };
-    this.inventory.category.push(newCategory);
-    this.saveInventoryData();
+  public addCategory(name: string): boolean {
+    const categoryExists = this.inventory.category.find(category => category.categoryName.toLowerCase() === name.toLowerCase());
+    if(categoryExists){
+      return false;
+    } else {
+      const newCategory: ProductsCategory = {
+        categoryId: this.getNextCategoryId(),
+        categoryName: name,
+        products: []
+      };
+      this.inventory.category.push(newCategory);
+      this.saveInventoryData();
+      return true;
+    }
   }
 
   public deleteCategory(id: number): void {

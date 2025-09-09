@@ -1,11 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Products } from '../../../core/interfaces/products.interface';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { User } from '../../../core/interfaces/user.interface';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FirstNamePipe } from '../../../pipes/firstname.pipe';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { CurrencyPipe } from '@angular/common';
 import { CartService } from '../../../core/services/cart/cart.service';
@@ -92,7 +92,7 @@ export class ProductDetailComponent implements OnInit {
   public startImageDisplay() {
     setInterval(() => {
       this.displayNextImage();
-    }, 5000);
+    }, 3000);
   }
 
   public addToCart() {

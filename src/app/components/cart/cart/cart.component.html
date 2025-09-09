@@ -15,16 +15,16 @@
             @for(item of cartItems; track item.product.id){
                 <mat-card style="margin: 10px;">
                     <mat-card-header>
-                    <mat-card-title>{{ item.product.name }}</mat-card-title>
-                    <mat-card-subtitle>{{ item.product.price | currency:'INR' }}</mat-card-subtitle>
+                        <mat-card-title>{{ item.product.name }}</mat-card-title>
+                        <mat-card-subtitle>{{ item.product.price | currency:'INR' }}</mat-card-subtitle>
                     </mat-card-header>
+
                     <mat-card-content>
-                    <p>Quantity: {{ item.quantity }}</p>
+                        <p>Quantity: {{ item.quantity }}</p>
                     </mat-card-content>
+
                     <mat-card-actions>
-                    <button mat-raised-button color="warn" (click)="removeFromCart(item.product)">
-                        Remove
-                    </button>
+                        <button mat-raised-button color="warn" (click)="removeFromCart(item.product)">Remove</button>
                     </mat-card-actions>
                 </mat-card>
             }

@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import { LoginRegisterService } from '../../../core/services/auth/login-register.service';
 import { User } from '../../../core/interfaces/user.interface';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -46,16 +46,12 @@ export class LoginSignupComponent {
         password: this.signUpForm.value.password,
         cart: [],
       } as User;
-      this.authService.registerUser(newUser).subscribe({
-        next:(res) => {
-          if(res){
-            this.snackBar.open('User Registeration Successfull.','Undo',{ duration: 3000 });
-            this.router.navigate(['/all-products'])
-          } else {
-            this.snackBar.open('User Registeration Failed!!','Undo',{ duration: 3000 });
-          }
-        }
-      })
+      if(this.authService.registerUser(newUser)){
+        this.snackBar.open('User Registeration Successfull.','Undo',{ duration: 3000 });
+        this.router.navigate(['/all-products'])
+      } else {
+        this.snackBar.open('User Registeration Failed!!','Undo',{ duration: 3000 });
+      }
     }
   }
 
@@ -65,20 +61,12 @@ export class LoginSignupComponent {
         email: this.loginForm.value.email,
         password: this.loginForm.value.password,
       }
-      this.authService.login(loginCredentials).subscribe({
-        next:(res) => {
-          if(res){
-            this.snackBar.open('Login Successful.','Undo',{ duration: 3000 });
-            console.log(this.authService.isLoggedIn());
-            
-            this.router.navigate(['/all-products'])
-          }
-        },
-        error: (err) => {
-          this.snackBar.open('Login Failed!!','Undo',{ duration: 3000 });
-          console.error('Error while login: ',err);
-        }
-      })
+      if(this.authService.login(loginCredentials)){
+        this.snackBar.open('Login Successful.','Undo',{ duration: 3000 });
+        this.router.navigate(['/all-products'])
+      } else {
+        this.snackBar.open('Login Failed!! Check Credentials & Try Again','Undo',{ duration: 3000 });
+      } 
     }
   }
 }

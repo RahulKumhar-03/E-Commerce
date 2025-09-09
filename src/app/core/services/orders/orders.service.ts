@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Orders } from '../../interfaces/orders.interface';
-import { Products } from '../../interfaces/products.interface';
-import { Cart } from '../../interfaces/cart.interface';
 import { CartService } from '../cart/cart.service';
 import { InventoryService } from '../inventory/inventory.service';
 import { CartItem } from '../../interfaces/cartItem.interface';

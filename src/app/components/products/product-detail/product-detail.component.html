@@ -1,6 +1,6 @@
 <div style="margin: 20px;">
     <div style="display: flex; flex-direction: row; justify-content: space-evenly; margin: 15px 20px;">
-        <h2>Product Detail Page</h2>
+        <h2>{{product?.name}}</h2>
         <div style="display: flex; flex-direction: row; gap: 20px; align-items: center;">
             <button mat-button routerLink="/all-products" class="btn btn-primary">Back to Products</button>
             <h4>User: {{currentUser.name | firstName}}</h4>
@@ -11,9 +11,8 @@
     <div style="justify-items: center; margin: 0 10px;">
         <mat-card class="product-card">
             <mat-card-header>
-                <div style="display: flex; flex-direction: row; width: 100%; justify-content: space-between; margin: 10px 20px;">
-                    <mat-card-title>{{ product?.name }}</mat-card-title>
-                    <mat-card-subtitle>{{ product?.price | currency:'INR' }}</mat-card-subtitle>
+                <div style="display: flex; flex-direction: row; width: 100%; justify-content: flex-end; margin: 10px 20px;">
+                    <mat-card-subtitle>Price: {{ product?.price | currency:'INR' }}</mat-card-subtitle>
                 </div>
             </mat-card-header>
 

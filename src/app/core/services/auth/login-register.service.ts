@@ -1,5 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
 import { User } from '../../interfaces/user.interface';
 import { UserLogin } from '../../interfaces/user-login.interface';
 import { Router } from '@angular/router';
@@ -8,50 +7,51 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class LoginRegisterService {
-  public _isLoggedIn = signal<boolean>(JSON.parse(localStorage.getItem('isLoggedIn') || 'false'));
-  public isLoggedIn = computed(() => this._isLoggedIn());
+  public isLoggedIn = signal<boolean>(JSON.parse(localStorage.getItem('isLoggedIn') || 'false'));
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   public generateId(): number{
-    let allUsers = JSON.parse(localStorage.getItem('users') || '[]');
+    let allUsers = this.getAllUsers();
     return allUsers.length + 1;
   }
 
-  public getAllUsers():Observable<User[]>{
+  public getAllUsers(){
     let allUsers = localStorage.getItem('users');
-    return of(allUsers ? JSON.parse(allUsers) as User[] : []);
+    return allUsers ? JSON.parse(allUsers) as User[] : [];
   }
 
   public logout(){
     localStorage.removeItem('currentUser');
     localStorage.setItem('isLoggedIn', JSON.stringify(false));
-    this._isLoggedIn.set(false);
+    this.isLoggedIn.set(false);
     this.router.navigate(['login'])
   }
 
-  public login(userCredentials: UserLogin):Observable<User>{
-    const allUsers = JSON.parse(localStorage.getItem('users') || '[]') as User[];
+  public login(userCredentials: UserLogin):boolean{
+    const allUsers = this.getAllUsers();
     const user = allUsers.find((user => user.email === userCredentials.email && user.password === userCredentials.password)) as User;
-    localStorage.setItem('currentUser',JSON.stringify(user));
-    localStorage.setItem('isLoggedIn', JSON.stringify(true));
-    this._isLoggedIn.set(true);
-    console.log('in login function call',this._isLoggedIn());
-    return of(user);
+    if(user){
+      localStorage.setItem('currentUser',JSON.stringify(user));
+      localStorage.setItem('isLoggedIn', JSON.stringify(true));
+      this.isLoggedIn.set(true);
+      return true;
+    }
+    return false;
   }
 
-  public registerUser(userData: User):Observable<User>{
-    let users = JSON.parse(localStorage.getItem('users') || '[]') as User[];
+  public registerUser(userData: User):boolean{
+    let users = this.getAllUsers();
     if(users.find(user => user.email === userData.email)){
-      return of();
+      return false;
     }
 
     users.push(userData);
     localStorage.setItem('users',JSON.stringify(users));
     localStorage.setItem('currentUser',JSON.stringify(userData));
     localStorage.setItem('isLoggedIn', JSON.stringify(true));
-    this._isLoggedIn.set(true);
-    return of(userData);
+    this.isLoggedIn.set(true);
+    return true;
   }
 
   public isAuthenticated(){
