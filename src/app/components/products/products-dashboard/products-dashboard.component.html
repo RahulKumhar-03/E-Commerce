@@ -9,7 +9,7 @@
     
     <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
         <mat-form-field>
-            <input matInput placeholder="Search By Name, Description" (input)="searchResult($event)">
+            <input matInput [(ngModel)]="searchedTerm" placeholder="Search By Name, Description" (ngModelChange)="searchResult()">
         </mat-form-field>
 
         <mat-slide-toggle [(ngModel)]="isChecked" (change)="sliderToggleChange()">{{isChecked ? 'InStock Products' : 'Out Of Stock Products'}}</mat-slide-toggle>

@@ -32,31 +32,7 @@ export class LoginSignupComponent {
       phone: ['', Validators.required],
       email:['',[Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(8)]],
-    },{validators: this.passwordMatchValidator('password','confirmPassword')})
-  }
-
-  public passwordMatchValidator(passwordControlName: string, confirmPasswordControlName: string):ValidatorFn {
-    return (formGroup: AbstractControl): ValidationErrors | null => {
-      const passwordControl = formGroup.get(passwordControlName);
-      const confirmPasswordControl = formGroup.get(confirmPasswordControlName);
-
-      if(!confirmPasswordControl || !passwordControl){
-        return null;
-      }
-
-      if (confirmPasswordControl.errors && !confirmPasswordControl.errors['mismatch']) {
-        return null;
-      }
-
-      if(passwordControl.value !== confirmPasswordControl.value){
-        confirmPasswordControl.setErrors({mismatch: true});
-        return {mismatch: true};
-      } else {
-        confirmPasswordControl.setErrors(null);
-        return null;
-      }
-    }
+    })
   }
 
   public submitRegisterForm(){

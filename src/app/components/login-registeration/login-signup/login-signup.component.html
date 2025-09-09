@@ -93,19 +93,6 @@
                     }
                 }
 
-                <mat-form-field>
-                    <input matInput type="password" placeholder="Enter Password Again" formControlName="confirmPassword">
-                </mat-form-field>
-                @if(signUpForm.get('confirmPassword')?.invalid && (signUpForm.get('confirmPassword')?.dirty || signUpForm.get('confirmPassword')?.touched)){
-                    @if(signUpForm.get('confirmPassword')?.errors?.['required']){
-                        <div class="error-message">Password is required</div>
-                    }
-                }
-
-                @if(signUpForm.hasError('mismatch') && signUpForm.get('confirmPassword')?.touched){
-                    <div class="error-message">Password doesn't match! Try again.</div>
-                }
-
                 <div style="margin-top: 5px;">
                     <button mat-button [disabled]="signUpForm.invalid" type="submit">
                         Submit

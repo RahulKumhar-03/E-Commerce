@@ -53,55 +53,77 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
     this.productService.getAllProducts().subscribe({
       next:(res) => {
         if(res){
+          // if(this.isChecked){
+          //   this.products = res.filter(item => item.quantity > 0);
+          // }
+          // else {
+          //   this.products = res.filter(item => item.quantity === 0);
+          // }
           this.products = res;
-          if(this.isChecked){
-            this.dataSource.data = res.filter(item => item.quantity > 0)
-          } else{
-            this.dataSource.data = res.filter(item => item.quantity === 0);
-          }
+          this.dataSource.data = res;
+          // if(this.isChecked){
+          //   this.dataSource.data = this.products.filter(item => item.quantity > 0)
+          // } else{
+          //   this.dataSource.data = this.products.filter(item => item.quantity === 0);
+          // }
         }
       }
     })
   }
 
   public onCategorySelect(){
-    if(this.categoryFilterKey === 0){
-      this.loadProducts();
-      return;
-    }
+    this.applyFilter();
+    // if(this.categoryFilterKey === 0){
+    //   this.loadProducts();
+    //   return;
+    // }
     
-    if(this.isChecked){
-      this.dataSource.data = this.products.filter(item => item.categoryId === this.categoryFilterKey && item.quantity > 0);
-    }
-    else {
-      this.dataSource.data = this.products.filter(item => item.categoryId === this.categoryFilterKey && item.quantity === 0);
-    }
+    // if(this.isChecked){
+    //   this.dataSource.data = this.products.filter(item => item.categoryId === this.categoryFilterKey && item.quantity > 0);
+    // }
+    // else {
+    //   this.dataSource.data = this.products.filter(item => item.categoryId === this.categoryFilterKey && item.quantity === 0);
+    // }
   }
 
   public sliderToggleChange(){
+    this.applyFilter();
+    // if(this.isChecked){
+    //   this.dataSource.data = this.products.filter(item => item.quantity > 0);
+    // }
+    // else {
+    //   this.dataSource.data = this.products.filter(item => item.quantity === 0);
+    // }
+  }
+
+  public searchResult(){
+    this.applyFilter();
+    // this.searchedTerm = (event.target as HTMLInputElement).value;
+    // this.dataSource.filter = this.searchedTerm.trim().toLowerCase();
+  }
+
+  public applyFilter(){
+    let filteredProductsArray = this.products;
+    if(this.categoryFilterKey !== 0){
+      filteredProductsArray = filteredProductsArray.filter(item => item.categoryId === this.categoryFilterKey);
+    }
+    else{
+      this.dataSource.data = filteredProductsArray;
+    }
+
     if(this.isChecked){
-      this.dataSource.data = this.products.filter(item => item.quantity > 0);
+      filteredProductsArray = filteredProductsArray.filter(product => product.quantity > 0);
+    } else {
+      filteredProductsArray = filteredProductsArray.filter(product => product.quantity === 0)
     }
-    else {
-      this.dataSource.data = this.products.filter(item => item.quantity === 0);
+
+    if(this.searchedTerm){
+      filteredProductsArray = filteredProductsArray.filter(product => 
+        product.name.toLowerCase().includes(this.searchedTerm.toLowerCase()) || product.description.toLowerCase().includes(this.searchedTerm.toLowerCase())
+      )
     }
+    this.dataSource.data = filteredProductsArray;
   }
-
-  public searchResult(event: Event){
-    this.searchedTerm = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = this.searchedTerm.trim().toLowerCase();
-  }
-
-  // public applyFilter():Products[]{
-    
-  //   return this.products.filter(product => {
-  //     const matchedCategory =!this.categoryFilterKey || product.categoryId === this.categoryFilterKey ;
-      
-  //     const matchedSearch = !this.searchedTerm && product.name.toLowerCase().includes(this.searchedTerm.toLowerCase()) || product.description.toLowerCase().includes(this.searchedTerm.toLowerCase());
-      
-  //     return matchedSearch && matchedCategory
-  //   })
-  // }
 
   public loadCategory(){
     this.categories = this.inventoryService.getInventory().category;
