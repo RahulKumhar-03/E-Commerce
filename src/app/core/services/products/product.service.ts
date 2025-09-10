@@ -11,18 +11,9 @@ export class ProductService {
 
   constructor(private inventoryService: InventoryService) { }
 
-  public getLastId():number{
-    const productId = localStorage.getItem('lastProductId');
-    return productId ? parseInt(productId, 10) : 0;
-  }
-
-  private setLastProductId(id: number){
-    localStorage.setItem('lastProductId', id.toString());
-  }
-
   public generateId(): number{
-    let newProductId = this.getLastId() + 1;
-    this.setLastProductId(newProductId);
+    let newProductId = parseInt(localStorage.getItem('lastProductId') || '0', 10) + 1;
+    localStorage.setItem('lastProductId', newProductId.toString());
     return newProductId;
   }
 

@@ -101,7 +101,8 @@ export class CartService {
   }
 
   public getCartQuantity(): number {
-    return this.getCartProducts()?.reduce((sum, item) => sum + item.quantity, 0);
+    return this.getCartProducts()?.length;
+    // return this.getCartProducts()?.reduce((sum, item) => sum + item.quantity, 0);
   }
 
   public getProductCountInCart(product: Products):number {

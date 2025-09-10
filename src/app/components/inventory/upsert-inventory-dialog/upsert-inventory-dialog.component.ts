@@ -18,6 +18,7 @@ export class UpsertInventoryDialogComponent {
   constructor(private dialogRef: MatDialogRef<UpsertInventoryDialogComponent>, private fb: FormBuilder){
     this.inventoryForm = this.fb.group({
       categoryName: ['', Validators.required],
+      gst:[0, Validators.required]
     })
   }
 
@@ -25,8 +26,9 @@ export class UpsertInventoryDialogComponent {
     if(this.inventoryForm.valid){
       const newCategory = {
         categoryName: this.inventoryForm.value.categoryName,
+        gst: this.inventoryForm.value.gst
       }
-      this.dialogRef.close(newCategory.categoryName);
+      this.dialogRef.close(newCategory);
     }
   }
 

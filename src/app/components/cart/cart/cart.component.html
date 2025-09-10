@@ -1,43 +1,56 @@
 <div style="margin: 30px 40px;">
     <mat-card>
-    <mat-card-header>
-        <mat-card-title style="font-weight: bold;">Cart</mat-card-title>
-    </mat-card-header>
+        <mat-card-header class="cart-header">
+            <mat-card-title style="font-weight: bold;">Cart</mat-card-title>
+            <div>
+                <mat-form-field>
+                    <mat-label>Select Delivery Location</mat-label>
+                    <mat-select [(value)]="selectedDeliveryLocationId" (selectionChange)="selectDeliveryLocation()">
+                        <mat-option [value]="0">Select City</mat-option>
+                        @for(location of deliveryLocations; track location.id){
+                            <mat-option [value]="location.id">{{location.city}}, {{location.state}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </mat-card-header>
 
-    <mat-card-content>
-        <div>
-            @if (cartItems.length === 0) {
-                <p>Your cart is empty.</p>
-            }
-        </div>
+        <mat-card-content>
+            <div>
+                @if (cartItems.length === 0) {
+                    <p>Your cart is empty.</p>
+                }
+            </div>
 
-        <div style="margin: 15px; display: grid; grid-template-columns: repeat(2,1fr);">
-            @for(item of cartItems; track item.product.id){
-                <mat-card style="margin: 10px;">
-                    <mat-card-header>
-                        <mat-card-title>{{ item.product.name }}</mat-card-title>
-                        <mat-card-subtitle>{{ item.product.price | currency:'INR' }}</mat-card-subtitle>
-                    </mat-card-header>
+            <div style="margin: 15px; display: grid; grid-template-columns: repeat(2,1fr);">
+                @for(item of cartItems; track item.product.id){
+                    <mat-card style="margin: 10px;" >
+                        <mat-card-header>
+                            <mat-card-title>{{ item.product.name }}</mat-card-title>
+                            <mat-card-subtitle>{{ item.product.price | currency:'INR' }}</mat-card-subtitle>
+                        </mat-card-header>
 
-                    <mat-card-content>
-                        <p>Quantity: {{ item.quantity }}</p>
-                    </mat-card-content>
+                        <mat-card-content>
+                            <p>Quantity: {{ item.quantity }}</p>
+                            <p>Total Price Before Gst: {{item.quantity * item.product.price}}</p>
+                            <p>Total Price after Gst: {{ getTotalPriceAfterGST(item.product.id, item.quantity, item.product.price)}}</p>
+                        </mat-card-content>
 
-                    <mat-card-actions>
-                        <button mat-raised-button color="warn" (click)="removeFromCart(item.product)">Remove</button>
-                    </mat-card-actions>
-                </mat-card>
-            }
-        </div>
-    </mat-card-content>
+                        <mat-card-actions>
+                            <button mat-raised-button color="warn" (click)="removeFromCart(item.product)">Remove</button>
+                        </mat-card-actions>
+                    </mat-card>
+                }
+            </div>
+        </mat-card-content>
 
-    <mat-card-actions style="margin: 5px 20px; display: flex; flex-direction: row; gap: 20px;">
-        <button mat-raised-button color="primary" (click)="placeOrder()" [disabled]="cartItems.length === 0">
-        Place Order
-        </button>
-        <button mat-raised-button color="warn" (click)="clearCart()" [disabled]="cartItems.length === 0">
-        Clear Cart
-        </button>
-    </mat-card-actions>
+        <mat-card-actions style="margin: 5px 20px; display: flex; flex-direction: row; gap: 20px;">
+            <button mat-raised-button color="primary" (click)="placeOrder()" [disabled]="cartItems.length === 0">
+            Place Order
+            </button>
+            <button mat-raised-button color="warn" (click)="clearCart()" [disabled]="cartItems.length === 0">
+            Clear Cart
+            </button>
+        </mat-card-actions>
     </mat-card>
 </div>

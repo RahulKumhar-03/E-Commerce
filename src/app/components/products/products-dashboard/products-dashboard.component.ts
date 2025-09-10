@@ -53,15 +53,6 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
   public loadProducts(){
     this.products = this.productService.getAllProducts();
     this.applyFilter();
-    // if(this.isChecked && this.categoryFilterKey !== 0){
-    //   this.products = this.productService.getAllProducts().filter(item => item.quantity > 0 && item.categoryId === this.categoryFilterKey);
-    // }
-    // else if(!this.isChecked && this.categoryFilterKey!== 0){
-    //   this.products = this.productService.getAllProducts().filter(item => item.quantity === 0 && item.categoryId === this.categoryFilterKey)
-    // }
-    // else {
-    //   this.products = this.productService.getAllProducts().filter(item => item.quantity > 0);
-    // }
   }
 
   public onCategorySelect(){

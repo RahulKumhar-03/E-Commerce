@@ -23,4 +23,10 @@ export const routes: Routes = [
     {
         path:'orders', loadComponent: () => import('./components/orders/orders-list/orders-list.component').then(m => m.OrdersListComponent),canActivate:[authGuard]
     },
+    {
+        path:'deliveries', loadComponent: () => import('./components/delivery/delivery-list/delivery-list.component').then(m => m.DeliveryListComponent),canActivate:[authGuard]
+    },
+    {
+        path:'delivery-location-to-product-mapping', loadComponent: () => import('./components/location-to-product-mapping/mapping-list/mapping-list.component').then(m => m.MappingListComponent),canActivate:[authGuard]
+    },
 ];

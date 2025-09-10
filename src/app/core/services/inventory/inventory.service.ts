@@ -11,7 +11,7 @@ export class InventoryService {
 
   constructor() { 
     this.inventory = this.loadInventory();
-   }
+  }
 
   public loadInventory(): Inventory {
     const inventory = localStorage.getItem('inventory');
@@ -35,16 +35,19 @@ export class InventoryService {
     return lastId;
   }
 
-  public addCategory(name: string): boolean {
-    const categoryExists = this.inventory.category.find(category => category.categoryName.toLowerCase() === name.toLowerCase());
+  public addCategory(name: string, gst: number): boolean {
+    const categoryExists = this.inventory.category.find(category => category?.categoryName.toLowerCase() === name?.toLowerCase());
     if(categoryExists){
       return false;
     } else {
       const newCategory: ProductsCategory = {
         categoryId: this.getNextCategoryId(),
         categoryName: name,
-        products: []
+        products: [],
+        gst: gst
       };
+      console.log(newCategory);
+      
       this.inventory.category.push(newCategory);
       this.saveInventoryData();
       return true;

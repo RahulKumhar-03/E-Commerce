@@ -10,6 +10,16 @@
                 <mat-error>Category Name is required</mat-error>
             }
         }
+
+        <mat-form-field style="width: 100%;">
+            <mat-label>Enter GST</mat-label>
+            <input type="number" matInput placeholder="GST" formControlName="gst">
+        </mat-form-field>
+        @if(inventoryForm.get('gst')?.invalid && (inventoryForm.get('gst')?.dirty || inventoryForm.get('gst')?.touched)){
+            @if(inventoryForm.get('gst')?.errors?.['required']){
+                <mat-error>GST is required</mat-error>
+            }
+        }
         <div style="margin-top: 5px;">
             <button mat-button [disabled]="inventoryForm.invalid" type="submit">
                 Submit

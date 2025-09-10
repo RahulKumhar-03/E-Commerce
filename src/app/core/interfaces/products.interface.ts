@@ -1,4 +1,3 @@
-import { FormArray } from "@angular/forms";
 import { ProductsReview } from "./products-review.interface";
 
 export interface Products {

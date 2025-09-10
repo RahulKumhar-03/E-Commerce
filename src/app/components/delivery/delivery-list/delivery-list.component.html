@@ -1,0 +1,38 @@
+<div style="padding: 10px 20px">
+
+    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 10px 40px;">
+        <button mat-button extended (click)="openDeliveryDialog()">
+          <mat-icon>add</mat-icon>
+          Add Delivery Location 
+        </button>
+    </div>
+
+    <div style="padding: 15px 40px">
+        <table mat-table [dataSource]="dataSource" style="padding: 0 20px;">
+                
+            <ng-container matColumnDef="city">
+                <th mat-header-cell *matHeaderCellDef>City</th>
+                <td mat-cell *matCellDef="let element">{{ element?.city }}</td>
+            </ng-container>
+                
+            <ng-container matColumnDef="state">
+                <th mat-header-cell *matHeaderCellDef>State</th>
+                <td mat-cell *matCellDef="let element">{{ element?.state }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Action</th>
+                <td mat-cell *matCellDef="let element">
+                    <div style="display: flex; flex-direction: row;">
+                        <button style="padding: 0 5px;" mat-icon-button (click)="openDeliveryDialog(element)"><mat-icon>edit</mat-icon></button>
+                        <button mat-icon-button (click)="deleteDeliveryLocation(element?.id)"><mat-icon>delete</mat-icon></button>
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+</div>

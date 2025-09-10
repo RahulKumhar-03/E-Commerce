@@ -14,6 +14,7 @@ import { ReviewsListComponent } from '../../reviews/reviews-list/reviews-list.co
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ProductsCategory } from '../../../core/interfaces/products-category.interface';
 import { MatSelectModule } from '@angular/material/select';
+import { SimilarProductsComponent } from "../../similar-products/similar-products/similar-products.component";
 
 @Component({
   selector: 'app-product-detail',
@@ -28,7 +29,8 @@ import { MatSelectModule } from '@angular/material/select';
     ReviewsListComponent,
     MatSnackBarModule,
     MatSelectModule,
-  ],
+    SimilarProductsComponent
+],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss',
 })

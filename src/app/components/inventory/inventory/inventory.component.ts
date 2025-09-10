@@ -35,7 +35,7 @@ export class InventoryComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(data=> {
       if(data){
-        if(this.inventoryService.addCategory(data)){
+        if(this.inventoryService.addCategory(data.categoryName, data.gst)){
           this.snackBar.open('New Category Created Successfully.','Undo',{
             duration: 3000,
           });

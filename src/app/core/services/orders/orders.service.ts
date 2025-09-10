@@ -30,7 +30,7 @@ export class OrdersService {
     localStorage.setItem('orders', JSON.stringify(this.orders));
   }
 
-  public createNewOrder(userId: number, username: string, cartItem: Cart): void {
+  public createNewOrder(userId: number, username: string, cartItem: Cart, gst: number): void {
     
     const newOrder: Orders = {
       orderId: this.orders.length + 1,
@@ -38,7 +38,7 @@ export class OrdersService {
       username,
       product: cartItem.product,
       quantity: cartItem.quantity,
-      totalPrice: cartItem.product.price * cartItem.quantity,
+      totalPrice: cartItem.product.price * cartItem.quantity + (cartItem.product.price * cartItem.quantity)*gst/100,
       date: new Date(),
     };
     this.orders.push(newOrder);
