@@ -12,7 +12,7 @@
             <input matInput [(ngModel)]="searchedTerm" placeholder="Search By Name, Description" (ngModelChange)="searchResult()">
         </mat-form-field>
 
-        <mat-slide-toggle [(ngModel)]="isChecked" (change)="sliderToggleChange()">{{isChecked ? 'InStock Products' : 'Out Of Stock Products'}}</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="stockViewToggle" (change)="sliderToggleChange()">{{stockViewToggle ? 'InStock Products' : 'Out Of Stock Products'}}</mat-slide-toggle>
 
         <mat-form-field>
             <mat-select [(value)]="categoryFilterKey" (selectionChange)="onCategorySelect()">

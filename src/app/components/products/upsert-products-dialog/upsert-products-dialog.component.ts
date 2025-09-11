@@ -84,6 +84,7 @@ export class UpsertProductsDialogComponent implements OnInit {
           productsImages: this.productForm.value.productImages,
           review: [],
           quantity: this.productForm.value.quantity,
+          isDeliverable: false
         };
 
         this.inventoryService.updateStock(updatedProductData.categoryId, updatedProductData.id, updatedProductData.quantity);
@@ -100,6 +101,7 @@ export class UpsertProductsDialogComponent implements OnInit {
           productsImages: this.productForm.value.productImages,
           review: [],
           quantity: this.productForm.value.quantity,
+          isDeliverable: false
         };
         this.dialogRef.close(newProductData);
       }

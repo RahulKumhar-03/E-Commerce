@@ -8,4 +8,5 @@ export interface Orders {
     quantity: number;
     totalPrice: number;
     date: Date;
+    deliveryLocation: string
 }

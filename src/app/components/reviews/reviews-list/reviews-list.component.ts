@@ -22,14 +22,14 @@ export class ReviewsListComponent implements OnInit {
   public reviews: ProductsReview[]= [];
   @Input() product!: Products;
 
-  constructor(private dialog: MatDialog, private service: ReviewService){}
+  constructor(private dialog: MatDialog, private reviewService: ReviewService){}
   
   ngOnInit():void{
     this.loadReviews();
   }
 
   public loadReviews(){
-    this.reviews = this.service.getReviewsData().filter(review => review.productId === this.product.id);
+    this.reviews = this.reviewService.getReviewsData().filter(review => review.productId === this.product.id);
   }
 
   public openReviewDialog(){
@@ -40,14 +40,14 @@ export class ReviewsListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(data => {
       if(data){
-        this.service.createReview(data);
+        this.reviewService.createReview(data);
         this.loadReviews();
       }
     })
   }
 
   public deleteReview(reviewId: number){
-    this.service.deleteReview(reviewId);
+    this.reviewService.deleteReview(reviewId);
     this.loadReviews();
   }
 }

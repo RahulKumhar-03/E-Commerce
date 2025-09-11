@@ -1,0 +1,13 @@
+.card h5{
+    margin: 5px 8px;
+}
+
+.card h3{
+    padding: 0 8px;
+}
+
+.products-list{
+    display:grid; 
+    grid-template-columns: repeat(2,1fr);
+    gap: 30px;
+}

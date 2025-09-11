@@ -22,34 +22,41 @@
                 }
             </div>
 
-            <div style="margin: 15px; display: grid; grid-template-columns: repeat(2,1fr);">
+            <div style="display: grid; grid-template-columns: repeat(2,1fr); column-gap: 10px;">
                 @for(item of cartItems; track item.product.id){
-                    <mat-card style="margin: 10px;" >
-                        <mat-card-header>
-                            <mat-card-title>{{ item.product.name }}</mat-card-title>
-                            <mat-card-subtitle>{{ item.product.price | currency:'INR' }}</mat-card-subtitle>
-                        </mat-card-header>
+                    <mat-card style="padding: 0px 15px;">
+                        <div class="card-row-design">
+                            <h2>{{ item.product.name }}</h2>
+                            <h4>{{ item.product.price | currency:'INR' }}</h4>
+                        </div>
 
-                        <mat-card-content>
-                            <p>Quantity: {{ item.quantity }}</p>
-                            <p>Total Price Before Gst: {{item.quantity * item.product.price}}</p>
-                            <p>Total Price after Gst: {{ getTotalPriceAfterGST(item.product.id, item.quantity, item.product.price)}}</p>
-                        </mat-card-content>
+                        <div>
+                            <p style="margin: 0;">Quantity: {{ item.quantity }}</p>
+                            <p>Total Price Before Gst: {{ item.quantity * item.product.price | currency:'INR' }}</p>
+                            <p>Total Price After Gst: {{ getTotalPriceAfterGST(item.product.categoryId, item.quantity, item.product.price) | currency:'INR'}}</p>
+                        </div>
 
-                        <mat-card-actions>
-                            <button mat-raised-button color="warn" (click)="removeFromCart(item.product)">Remove</button>
-                        </mat-card-actions>
+                        <div class="card-row-design">
+                            <button mat-raised-button style="margin-bottom: 8px;" (click)="removeFromCart(item.product)">Remove</button>
+                            @if(selectedDeliveryLocationId === 0){}
+                            @else if(item.product.isDeliverable){
+                                <h5 style="color: green;">Product Deliverable.</h5>
+                            }
+                            @else {
+                                <h5 style="color: #FB5A5A;">Product Not Deliverable.</h5>
+                            }
+                        </div>
                     </mat-card>
                 }
             </div>
         </mat-card-content>
 
         <mat-card-actions style="margin: 5px 20px; display: flex; flex-direction: row; gap: 20px;">
-            <button mat-raised-button color="primary" (click)="placeOrder()" [disabled]="cartItems.length === 0">
-            Place Order
+            <button mat-raised-button (click)="placeOrder()" [disabled]="isAllProductsDeliverable()">
+                Place Order
             </button>
             <button mat-raised-button color="warn" (click)="clearCart()" [disabled]="cartItems.length === 0">
-            Clear Cart
+                Clear Cart
             </button>
         </mat-card-actions>
     </mat-card>

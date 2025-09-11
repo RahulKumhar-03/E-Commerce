@@ -1,6 +1,15 @@
 .cart-header{
     display: flex; 
     flex-direction: row; 
-    justify-content: space-between; 
-    margin:10px;
+    justify-content: space-between;
+    margin: 10px;
 }
+
+.card-row-design{
+    display: flex; 
+    flex-direction: row; 
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+

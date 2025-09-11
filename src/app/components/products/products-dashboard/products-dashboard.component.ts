@@ -28,7 +28,7 @@ import { CartService } from '../../../core/services/cart/cart.service';
 })
 export class ProductsDashboardComponent implements OnInit, AfterViewInit {
   public categories: ProductsCategory[] = [];
-  public isChecked: boolean = true;
+  public stockViewToggle: boolean = true;
   public dataSource = new MatTableDataSource<Products>();
   public products: Products[] = [];
   public searchedTerm: string = '';
@@ -76,7 +76,7 @@ export class ProductsDashboardComponent implements OnInit, AfterViewInit {
       this.dataSource.data = filteredProductsArray;
     }
 
-    if(this.isChecked){
+    if(this.stockViewToggle){
       filteredProductsArray = filteredProductsArray.filter(product => product.quantity > 0);
     } else {
       filteredProductsArray = filteredProductsArray.filter(product => product.quantity === 0)

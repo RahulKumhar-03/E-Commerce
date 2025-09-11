@@ -19,7 +19,7 @@ export class OrdersListComponent implements OnInit, AfterViewInit {
   public currentUser: User = JSON.parse(localStorage.getItem('currentUser') || '{}')
   public orders: Orders[] = [];
   public dataSource = new MatTableDataSource<Orders>();
-  public displayedColumns: string[] = ['orderId', 'userName', 'productsOrdered', 'quantityOrdered', 'productPrice', 'totalPrice', 'orderDate'];
+  public displayedColumns: string[] = ['orderId', 'userName', 'productsOrdered', 'quantityOrdered', 'productPrice', 'totalPrice', 'deliveryLocation', 'orderDate'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private orderService: OrdersService){}

@@ -1,6 +1,6 @@
 <div style="margin: 20px;">
     <div style="display: flex; flex-direction: row; justify-content: space-evenly; margin: 15px 20px;">
-        <h2>{{product?.name}}</h2>
+        <h2>Product: {{product?.name}}</h2>
         <div style="display: flex; flex-direction: row; gap: 20px; align-items: center;">
             <button mat-button routerLink="/all-products" class="btn btn-primary">Back to Products</button>
             <h4>User: {{currentUser.name | firstName}}</h4>
@@ -41,8 +41,7 @@
     <div>
         <app-reviews-list [product]="product!"></app-reviews-list>
     </div>
-
-    <h3 style="margin-top: 20px;">Similar Products in Category</h3>
-
-    <app-similar-products [product]="product!"></app-similar-products>
+    <div>
+        <app-similar-products [product]="product" [otherProductsInCategory]="otherProductsInCategory"></app-similar-products>
+    </div>
 </div>

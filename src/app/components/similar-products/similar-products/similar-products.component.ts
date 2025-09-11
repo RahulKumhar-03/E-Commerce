@@ -1,35 +1,20 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
 import { Products } from '../../../core/interfaces/products.interface';
-import { ProductsCategory } from '../../../core/interfaces/products-category.interface';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-similar-products',
-  imports: [MatCardModule, CurrencyPipe, RouterLink],
+  imports: [MatCardModule, CurrencyPipe, MatButtonModule, RouterLink],
   templateUrl: './similar-products.component.html',
   styleUrl: './similar-products.component.scss'
 })
-export class SimilarProductsComponent implements OnInit {
-  public otherProductsInCategory: Products[] = [];
-  @Input() product!: Products;
+export class SimilarProductsComponent {
+  @Input() otherProductsInCategory: Products[] = [];
+  @Input() product: Products | undefined;
+
   constructor(){}
 
-  ngOnInit(): void {
-    this.loadOtherProductsInCategory();
-  }
-
-  public loadOtherProductsInCategory(){
-    const allCategories: ProductsCategory[] = JSON.parse(
-          localStorage.getItem('inventory') || ''
-        ).category;
-        const productsInCategory: Products[] | undefined = allCategories.find(
-          (c) => c.categoryId === this.product?.categoryId
-        )?.products;
-        this.otherProductsInCategory =
-          productsInCategory?.filter(
-            (product) => product.id !== this.product?.id
-          ) || [];
-  }
 }

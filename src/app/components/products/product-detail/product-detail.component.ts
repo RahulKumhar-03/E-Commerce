@@ -12,9 +12,9 @@ import { CartService } from '../../../core/services/cart/cart.service';
 import { MatBadgeModule } from '@angular/material/badge';
 import { ReviewsListComponent } from '../../reviews/reviews-list/reviews-list.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { ProductsCategory } from '../../../core/interfaces/products-category.interface';
 import { MatSelectModule } from '@angular/material/select';
 import { SimilarProductsComponent } from "../../similar-products/similar-products/similar-products.component";
+import { ProductsCategory } from '../../../core/interfaces/products-category.interface';
 
 @Component({
   selector: 'app-product-detail',
@@ -37,24 +37,18 @@ import { SimilarProductsComponent } from "../../similar-products/similar-product
 export class ProductDetailComponent implements OnInit {
   public cartItemCount: number = 0;
   public currentUser: User = JSON.parse(localStorage.getItem('currentUser') || '{}');
-  public currentImageUrl: string = '';
+  public currentImageUrl: string | undefined = '';
   public nextImageUrlIndex: number = 0;
   public otherProductsInCategory: Products[] = [];
-  public product!: Products | undefined;
+  public product: Products | undefined;
   public productCountInCart: number = 0;
 
-  constructor(
-    public router: ActivatedRoute,
-    private snackBar: MatSnackBar,
-    private cartService: CartService
-  ) {
+  constructor(public router: ActivatedRoute, private snackBar: MatSnackBar, private cartService: CartService) {
     this.router.paramMap.subscribe((param) => {
       let id = Number(this.router.snapshot.paramMap.get('id'));
-      const allProducts: Products[] = JSON.parse(
-        localStorage.getItem('allProducts') || '[]'
-      );
+      const allProducts: Products[] = JSON.parse(localStorage.getItem('allProducts') || '[]');
       this.product = allProducts.find((item) => item.id === id);
-      this.getOtherProductsInCategory();
+      this.loadOtherProductsInCategory();
       this.displayNextImage();
     });
   }
@@ -63,31 +57,26 @@ export class ProductDetailComponent implements OnInit {
     this.updateCartCount();
     this.updateProductCountInCart();
     this.startImageDisplay();
-  }
-
-  public getOtherProductsInCategory(): void {
-    const allCategories: ProductsCategory[] = JSON.parse(
-      localStorage.getItem('inventory') || ''
-    ).category;
-    const productsInCategory: Products[] | undefined = allCategories.find(
-      (c) => c.categoryId === this.product?.categoryId
-    )?.products;
-    this.otherProductsInCategory =
-      productsInCategory?.filter(
-        (product) => product.id !== this.product?.id
-      ) || [];
+    this.loadOtherProductsInCategory();
   }
 
   public updateCartCount() {
     this.cartItemCount = this.cartService.getCartQuantity();
   }
 
+   public loadOtherProductsInCategory(){
+    const allCategories: ProductsCategory[] = JSON.parse(localStorage.getItem('inventory') || '').category;
+    const productsInCategory: Products[] | undefined = allCategories.find((c) => c.categoryId === this.product?.categoryId)?.products;
+    
+    this.otherProductsInCategory = productsInCategory?.filter((product) => product.id !== this.product?.id) || [];
+  }
+
   public updateProductCountInCart() {
-    this.productCountInCart = this.cartService.getProductCountInCart(this.product!);
+    this.productCountInCart = this.cartService.getProductCountInCart(this.product);
   }
 
   public displayNextImage() {
-    this.currentImageUrl = this.product!.productsImages[this.nextImageUrlIndex];
+    this.currentImageUrl = this.product?.productsImages[this.nextImageUrlIndex];
     this.nextImageUrlIndex = (this.nextImageUrlIndex + 1) % this.product!.productsImages.length;
   }
 

@@ -102,18 +102,17 @@ export class CartService {
 
   public getCartQuantity(): number {
     return this.getCartProducts()?.length;
-    // return this.getCartProducts()?.reduce((sum, item) => sum + item.quantity, 0);
   }
 
-  public getProductCountInCart(product: Products):number {
-    let cartProduct = this.currentUser.cart.find(item => item.product.id === product.id);
-    return cartProduct?.quantity || 0;
+  public getProductCountInCart(product: Products | undefined):number {
+    return this.currentUser.cart.find(item => item.product.id === product?.id)?.quantity || 0;
   }
 
   public updateProductInCart(product: Products){
     this.currentUser.cart.forEach(item => {
       if(item.product.id === product.id){
         item.product.price = product.price;
+        item.product.quantity = product.quantity;
       }
     })
     this.saveCurrentUser(this.currentUser)

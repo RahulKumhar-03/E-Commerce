@@ -5,7 +5,7 @@
         <mat-form-field>
             <input matInput placeholder="Enter Product Name" formControlName="name">
         </mat-form-field>
-        @if(productForm.get('name')?.invalid && (productForm.get('name')?.dirty || productForm.get('name')?.touched)){
+        @if(productForm.get('name')?.invalid && productForm.get('name')?.touched){
             @if(productForm.get('name')?.errors?.['required']){
                 <mat-error>Product Name is required</mat-error>
             }

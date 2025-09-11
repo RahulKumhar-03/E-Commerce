@@ -4,11 +4,13 @@ import { CartService } from '../cart/cart.service';
 import { InventoryService } from '../inventory/inventory.service';
 import { CartItem } from '../../interfaces/cartItem.interface';
 import { Cart } from '../../interfaces/cart.interface';
+import { DeliveryLocation } from '../../interfaces/delivery-location.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrdersService {
+  public deliveryLocations: DeliveryLocation[] = JSON.parse(localStorage.getItem('deliveryLocation') || '[]');
   public orders: Orders[] = [];
 
   constructor(private cartService: CartService, private inventoryService: InventoryService) {
@@ -30,8 +32,8 @@ export class OrdersService {
     localStorage.setItem('orders', JSON.stringify(this.orders));
   }
 
-  public createNewOrder(userId: number, username: string, cartItem: Cart, gst: number): void {
-    
+  public createNewOrder(userId: number, username: string, cartItem: Cart, gst: number, deliveryLocationId: number): void {
+    let deliveryLocation = this.deliveryLocations.find(location => location.id === deliveryLocationId)!;
     const newOrder: Orders = {
       orderId: this.orders.length + 1,
       userId,
@@ -39,6 +41,7 @@ export class OrdersService {
       product: cartItem.product,
       quantity: cartItem.quantity,
       totalPrice: cartItem.product.price * cartItem.quantity + (cartItem.product.price * cartItem.quantity)*gst/100,
+      deliveryLocation: deliveryLocation?.city+' '+deliveryLocation.state,
       date: new Date(),
     };
     this.orders.push(newOrder);

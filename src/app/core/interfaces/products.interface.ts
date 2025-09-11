@@ -9,4 +9,5 @@ export interface Products {
     categoryId: number;
     review: ProductsReview[];
     productsImages: string[];
+    isDeliverable: boolean;
 }
