@@ -3,6 +3,7 @@
     
     <form [formGroup]="productForm" (submit)="submitProductForm()" style="display: flex; flex-direction: column; margin: auto; width: 80%; padding: 20px 0;">
         <mat-form-field>
+            <mat-label>Enter Product Name</mat-label>
             <input matInput placeholder="Enter Product Name" formControlName="name">
         </mat-form-field>
         @if(productForm.get('name')?.invalid && productForm.get('name')?.touched){
@@ -12,6 +13,7 @@
         }
 
         <mat-form-field>
+            <mat-label>Enter Product Description</mat-label>
             <input matInput placeholder="Enter Product Description" formControlName="description">
         </mat-form-field>
         @if(productForm.get('description')?.invalid && (productForm.get('description')?.dirty || productForm.get('description')?.touched)){
@@ -21,6 +23,7 @@
         }
 
         <mat-form-field>
+            <mat-label>Enter Product Price</mat-label>
             <input matInput type="number" [min]="500" placeholder="Enter Product Price" formControlName="price">
         </mat-form-field>
         @if(productForm.get('price')?.invalid && (productForm.get('price')?.dirty || productForm.get('price')?.touched)){

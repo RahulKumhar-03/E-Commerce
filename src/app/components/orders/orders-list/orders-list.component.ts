@@ -8,10 +8,11 @@ import { MatListModule } from '@angular/material/list';
 import { User } from '../../../core/interfaces/user.interface';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { FirstNamePipe } from '../../../pipes/firstname.pipe';
 
 @Component({
   selector: 'app-orders-list',
-  imports: [MatTableModule, MatPaginatorModule, DatePipe, CurrencyPipe, MatListModule, RouterLink, RouterLinkActive, MatButtonModule],
+  imports: [MatTableModule, MatPaginatorModule, DatePipe, CurrencyPipe, MatListModule, RouterLink, RouterLinkActive, MatButtonModule, FirstNamePipe],
   templateUrl: './orders-list.component.html',
   styleUrl: './orders-list.component.scss'
 })
@@ -19,7 +20,7 @@ export class OrdersListComponent implements OnInit, AfterViewInit {
   public currentUser: User = JSON.parse(localStorage.getItem('currentUser') || '{}')
   public orders: Orders[] = [];
   public dataSource = new MatTableDataSource<Orders>();
-  public displayedColumns: string[] = ['orderId', 'userName', 'productsOrdered', 'quantityOrdered', 'productPrice', 'totalPrice', 'deliveryLocation', 'orderDate'];
+  public displayedColumns: string[] = ['orderId', 'productsOrdered', 'quantityOrdered', 'productPrice', 'totalPrice', 'deliveryLocation', 'orderDate'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private orderService: OrdersService){}

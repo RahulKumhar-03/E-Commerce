@@ -18,19 +18,7 @@ import { ProductsCategory } from '../../../core/interfaces/products-category.int
 
 @Component({
   selector: 'app-product-detail',
-  imports: [
-    MatButtonModule,
-    MatIconModule,
-    FirstNamePipe,
-    RouterLink,
-    MatCardModule,
-    CurrencyPipe,
-    MatBadgeModule,
-    ReviewsListComponent,
-    MatSnackBarModule,
-    MatSelectModule,
-    SimilarProductsComponent
-],
+  imports: [MatIconModule, FirstNamePipe, RouterLink, MatCardModule, CurrencyPipe, MatBadgeModule, ReviewsListComponent, MatSnackBarModule, MatSelectModule, SimilarProductsComponent, MatButtonModule],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss',
 })
@@ -41,23 +29,27 @@ export class ProductDetailComponent implements OnInit {
   public nextImageUrlIndex: number = 0;
   public otherProductsInCategory: Products[] = [];
   public product: Products | undefined;
+  public productId: number | undefined;
   public productCountInCart: number = 0;
 
-  constructor(public router: ActivatedRoute, private snackBar: MatSnackBar, private cartService: CartService) {
+  constructor(public router: ActivatedRoute, private snackBar: MatSnackBar, private cartService: CartService) {}
+
+  ngOnInit() {
     this.router.paramMap.subscribe((param) => {
-      let id = Number(this.router.snapshot.paramMap.get('id'));
-      const allProducts: Products[] = JSON.parse(localStorage.getItem('allProducts') || '[]');
-      this.product = allProducts.find((item) => item.id === id);
+      this.productId = Number(this.router.snapshot.paramMap.get('id'));
+      this.loadProduct();
       this.loadOtherProductsInCategory();
       this.displayNextImage();
     });
-  }
-
-  ngOnInit() {
     this.updateCartCount();
     this.updateProductCountInCart();
     this.startImageDisplay();
     this.loadOtherProductsInCategory();
+  }
+
+  public loadProduct(){
+    const allProducts: Products[] = JSON.parse(localStorage.getItem('allProducts') || '[]');
+    this.product = allProducts.find((item) => item.id === this.productId);
   }
 
   public updateCartCount() {

@@ -66,9 +66,6 @@ export class CartComponent implements OnInit {
     if(this.selectedDeliveryLocationId !== 0){
 
       this.cartItems.forEach(item => {
-        let productDeliverable:boolean = false;
-        console.log('first line after selection is made',productDeliverable);
-        
         let isMappingExists = this.productToDeliveryLocationMappings.find(mapping => 
           mapping.productId === item.product.id && mapping.deliveryLocationId === this.selectedDeliveryLocationId
         )

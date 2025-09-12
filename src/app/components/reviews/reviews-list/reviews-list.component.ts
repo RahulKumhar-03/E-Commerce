@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,16 +8,15 @@ import { ProductsReview } from '../../../core/interfaces/products-review.interfa
 import { MatCardModule } from '@angular/material/card';
 import { User } from '../../../core/interfaces/user.interface';
 import { Products } from '../../../core/interfaces/products.interface';
-import { NgxStarsModule} from 'ngx-stars'
-import { FormsModule } from '@angular/forms';
+import { NgxStarsModule } from 'ngx-stars' 
 
 @Component({
   selector: 'app-reviews-list',
-  imports: [FormsModule, MatIconModule, MatButtonModule, MatDialogModule, MatCardModule, NgxStarsModule],
+  imports: [MatIconModule, MatButtonModule, MatDialogModule, MatCardModule, NgxStarsModule],
   templateUrl: './reviews-list.component.html',
   styleUrl: './reviews-list.component.scss'
 })
-export class ReviewsListComponent implements OnInit {
+export class ReviewsListComponent implements OnInit, OnChanges {
   public currentUser: User = JSON.parse(localStorage.getItem('currentUser') || '{}');
   public reviews: ProductsReview[]= [];
   @Input() product!: Products;
@@ -26,6 +25,12 @@ export class ReviewsListComponent implements OnInit {
   
   ngOnInit():void{
     this.loadReviews();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['product']){
+      this.loadReviews();
+    }
   }
 
   public loadReviews(){
