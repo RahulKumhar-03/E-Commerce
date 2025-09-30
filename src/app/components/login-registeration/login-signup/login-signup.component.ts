@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import { LoginRegisterService } from '../../../core/services/auth/login-register.service';
 import { User } from '../../../core/interfaces/user.interface';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -22,7 +22,7 @@ export class LoginSignupComponent {
 
   constructor(private fb: FormBuilder, private authService: LoginRegisterService, private snackBar: MatSnackBar, private router: Router){
     this.loginForm = this.fb.group({
-      email: ['',[Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['',[Validators.required, Validators.minLength(8)]]
     })
 
@@ -30,9 +30,24 @@ export class LoginSignupComponent {
       name: ['', Validators.required],
       address: ['',Validators.required],
       phone: ['', Validators.required],
-      email:['',[Validators.required, Validators.email]],
+      email:['',[this.emailValidators(), Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
     })
+  }
+
+  public emailValidators():ValidatorFn{
+    return (emailControl:AbstractControl):ValidationErrors | null => {
+      let emailControlValue = emailControl.value;
+
+      if(emailControlValue){
+        const domain:string = emailControlValue.split('@');
+        
+        if(domain[1]?.toLowerCase() === 'gmail.com' || domain[1]?.toLowerCase() === 'yahoo.com'){
+          return null
+        }
+      }
+      return { emailDomain: { requiredDomain: "'gmail.com' or 'yahoo.com'" } };
+    }
   }
 
   public submitRegisterForm(){

@@ -77,7 +77,10 @@
                         <mat-error>User Email is required</mat-error>
                     }
                     @if(signUpForm.get('email')?.errors?.['email']){
-                        <mat-error>Please Enter Valid Email-Id</mat-error>
+                        <mat-error>Please Enter valid email address</mat-error>
+                    }
+                    @if(signUpForm.get('email')?.errors?.['emailDomain']){
+                        <mat-error>Email Domain Not Allowed.</mat-error>
                     }
                 }
 
