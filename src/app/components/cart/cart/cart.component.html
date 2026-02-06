@@ -1,0 +1,63 @@
+<div style="margin: 30px 40px;">
+    <mat-card>
+        <mat-card-header class="cart-header">
+            <mat-card-title style="font-weight: bold;">Cart</mat-card-title>
+            <div>
+                <mat-form-field>
+                    <mat-label>Select Delivery Location</mat-label>
+                    <mat-select [(value)]="selectedDeliveryLocationId" (selectionChange)="selectDeliveryLocation()">
+                        <mat-option [value]="0">Select City</mat-option>
+                        @for(location of deliveryLocations; track location.id){
+                            <mat-option [value]="location.id">{{location.city}}, {{location.state}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                @if (cartItems.length === 0) {
+                    <p>Your cart is empty.</p>
+                }
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(2,1fr); column-gap: 10px;">
+                @for(item of cartItems; track item.product.id){
+                    <mat-card style="padding: 0px 15px;">
+                        <div class="card-row-design">
+                            <h2>{{ item.product.name }}</h2>
+                            <h4>{{ item.product.price | currency:'INR' }}</h4>
+                        </div>
+
+                        <div>
+                            <p style="margin: 0;">Quantity: {{ item.quantity }}</p>
+                            <p>Total Price Before Gst: {{ item.quantity * item.product.price | currency:'INR' }}</p>
+                            <p>Total Price After Gst: {{ getTotalPriceAfterGST(item.product.categoryId, item.quantity, item.product.price) | currency:'INR'}}</p>
+                        </div>
+
+                        <div class="card-row-design">
+                            <button mat-raised-button style="margin-bottom: 8px;" (click)="removeFromCart(item.product)">Remove</button>
+                            @if(selectedDeliveryLocationId === 0){}
+                            @else if(item.product.isDeliverable){
+                                <h5 style="color: green;">Product Deliverable.</h5>
+                            }
+                            @else {
+                                <h5 style="color: #FB5A5A;">Product Not Deliverable.</h5>
+                            }
+                        </div>
+                    </mat-card>
+                }
+            </div>
+        </mat-card-content>
+
+        <mat-card-actions style="margin: 5px 20px; display: flex; flex-direction: row; gap: 20px;">
+            <button mat-raised-button (click)="placeOrder()" [disabled]="isAllProductsDeliverable()">
+                Place Order
+            </button>
+            <button mat-raised-button color="warn" (click)="clearCart()" [disabled]="cartItems.length === 0">
+                Clear Cart
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>

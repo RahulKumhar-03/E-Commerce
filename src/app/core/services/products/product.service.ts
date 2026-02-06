@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Products } from '../../interfaces/products.interface';
-import { Observable, of } from 'rxjs';
+import { InventoryService } from '../inventory/inventory.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,32 +9,47 @@ export class ProductService {
   
   public isEditting = signal<boolean>(false);
 
-  constructor() { }
+  constructor(private inventoryService: InventoryService) { }
 
-  public getAllProducts():Observable<Products[]>{
+  public generateId(): number{
+    let newProductId = parseInt(localStorage.getItem('lastProductId') || '0', 10) + 1;
+    localStorage.setItem('lastProductId', newProductId.toString());
+    return newProductId;
+  }
+
+  public getAllProducts():Products[]{
     let products = JSON.parse(localStorage.getItem('allProducts') || '[]') as Products[];
-    return of(products);
+    return products;
   }
 
-  public createProduct(newProduct: Products):Observable<Products>{
-    let allProducts = JSON.parse(localStorage.getItem('allProducts') || '[]') as Products[];
-    allProducts.push(newProduct);
-    localStorage.setItem('allProducts',JSON.stringify(allProducts));
-    return of(newProduct);
+  public createProduct(newProduct: Products):boolean{
+    let allProducts = this.getAllProducts();
+    let productExists:Products | undefined = allProducts.find(product => product.name.toLowerCase() === newProduct.name.toLowerCase() && product.categoryId === newProduct.categoryId);
+    
+    if(productExists){
+      return false;
+    } else {
+      allProducts.push(newProduct);
+      localStorage.setItem('allProducts',JSON.stringify(allProducts));
+      return true;
+    }
   }
 
-  public updateProduct(updatedProductData: Products):Observable<boolean>{
+  public updateProduct(updatedProductData: Products):boolean{
     let allProducts = JSON.parse(localStorage.getItem('allProducts') || '[]') as Products[];
     let productIndex = allProducts.findIndex(product => product.id === updatedProductData.id);
-    allProducts[productIndex] = updatedProductData;
-    localStorage.setItem('allProducts', JSON.stringify(allProducts));
-    return of(true);
+    if(productIndex !== -1){
+      allProducts[productIndex] = updatedProductData;
+      localStorage.setItem('allProducts', JSON.stringify(allProducts));
+      return true;
+    }
+    return false;
   }
 
-  public deleteProduct(productId: number):Observable<boolean>{
+  public deleteProduct(categoryId:number, productId: number){
     let allProducts = JSON.parse(localStorage.getItem('allProducts') || '[]') as Products[];
     allProducts = allProducts.filter(product => product.id !== productId);
     localStorage.setItem('allProducts',JSON.stringify(allProducts));
-    return of(true);
+    this.inventoryService.deleteProductFromCategory(categoryId, productId);
   }
 }

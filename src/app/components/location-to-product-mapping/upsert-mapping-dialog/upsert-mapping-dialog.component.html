@@ -1,0 +1,42 @@
+<div style="justify-items: center;">
+    <h2 style="padding-top: 5px;">{{mappingService.isEditing() ? 'Update Delivery Location' : 'New Delivery Location'}}</h2>
+    
+    <form [formGroup]="mappingForm" (submit)="submitMappingForm()" style="display: flex; flex-direction: column; margin: auto; width: 80%; padding: 20px 0;">
+        <mat-form-field>
+            <mat-label>Select Product</mat-label>
+            <mat-select formControlName="productId">
+                @for(product of allProducts; track product.id){
+                    <mat-option [value]="product.id">{{product.name}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+        @if(mappingForm.get('productId')?.invalid && (mappingForm.get('productId')?.dirty || mappingForm.get('productId')?.touched)){
+            @if(mappingForm.get('productId')?.errors?.['required']){
+                <mat-error>Product is required</mat-error>
+            }
+        }
+
+        <mat-form-field>
+            <mat-label>Select Delivery Location</mat-label>
+            <mat-select formControlName="deliveryLocationId">
+                @for(location of allDeliveryLocations; track location.id){
+                    <mat-option [value]="location.id">{{location.city}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+        @if(mappingForm.get('deliveryLocationId')?.invalid && (mappingForm.get('deliveryLocationId')?.dirty || mappingForm.get('deliveryLocationId')?.touched)){
+            @if(mappingForm.get('deliveryLocationId')?.errors?.['required']){
+                <mat-error>Delivery Location is required</mat-error>
+            }
+        }
+
+        <div style="margin-top: 5px;">
+            <button mat-button [disabled]="mappingForm.invalid" type="submit">
+                Submit
+            </button>
+            <button mat-button (click)="onDialogClose()">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,30 +1,83 @@
-<div style="justify-items: center;">
-    <h2 style="padding-top: 5px;">{{service.isEditting() ? 'Update Appointment Record' : 'New Appointment'}}</h2>
+<div style="justify-items: center; overflow-y: auto; height: 600px;">
+    <h2 style="padding-top: 5px;">{{service.isEditting() ? 'Update Product' : 'New Product'}}</h2>
     
     <form [formGroup]="productForm" (submit)="submitProductForm()" style="display: flex; flex-direction: column; margin: auto; width: 80%; padding: 20px 0;">
         <mat-form-field>
+            <mat-label>Enter Product Name</mat-label>
             <input matInput placeholder="Enter Product Name" formControlName="name">
         </mat-form-field>
-        
+        @if(productForm.get('name')?.invalid && productForm.get('name')?.touched){
+            @if(productForm.get('name')?.errors?.['required']){
+                <mat-error>Product Name is required</mat-error>
+            }
+        }
+
         <mat-form-field>
+            <mat-label>Enter Product Description</mat-label>
             <input matInput placeholder="Enter Product Description" formControlName="description">
         </mat-form-field>
+        @if(productForm.get('description')?.invalid && (productForm.get('description')?.dirty || productForm.get('description')?.touched)){
+            @if(productForm.get('description')?.errors?.['required']){
+                <mat-error>Product description is required</mat-error>
+            }
+        }
 
         <mat-form-field>
+            <mat-label>Enter Product Price</mat-label>
             <input matInput type="number" [min]="500" placeholder="Enter Product Price" formControlName="price">
         </mat-form-field>
+        @if(productForm.get('price')?.invalid && (productForm.get('price')?.dirty || productForm.get('price')?.touched)){
+            @if(productForm.get('price')?.errors?.['required']){
+                <mat-error>Product price is required</mat-error>
+            }
 
-        <!-- <mat-form-field>
+            @if(productForm.get('price')?.errors?.['min']){
+                <mat-error>Product price should be minimum Rs.500</mat-error>
+            }
+        }
+
+        <mat-form-field>
             <mat-label>Select Category ID</mat-label>
             <mat-select formControlName="categoryId">
                 @for(category of categories; track category.categoryName){
-                    <mat-option [value]="category.categoryId">{{category.categoryId}}-{{category.categoryName}}</mat-option>
+                    <mat-option [value]="category.categoryId">{{category.categoryName}}</mat-option>
                 }
             </mat-select>
-        </mat-form-field> -->
-        <mat-form-field>
-            <input matInput placeholder="Enter Category ID" formControlName="categoryId">
         </mat-form-field>
+        @if(productForm.get('categoryId')?.invalid && (productForm.get('categoryId')?.dirty || productForm.get('categoryId')?.touched)){
+            @if(productForm.get('categoryId')?.errors?.['required']){
+                <mat-error>Product Category is required</mat-error>
+            }
+        }
+
+        <mat-form-field>
+            <mat-label>Enter Product Quantity</mat-label>
+            <input matInput type="number" min="0" placeholder="Enter Quantity of Product" formControlName="quantity">
+        </mat-form-field>
+        @if(productForm.get('quantity')?.invalid && (productForm.get('quantity')?.dirty || productForm.get('quantity')?.touched)){
+            @if(productForm.get('quantity')?.errors?.['required']){
+                <mat-error>Product Quantity is required</mat-error>
+            }
+            @if(productForm.get('quantity')?.errors?.['min']){
+                <mat-error>Product Quantity cannot be less than 1.</mat-error>
+            }
+        }
+        <div>
+            <div formArrayName="productImages" style="display: flex; flex-direction: column;">
+                <mat-label>Image Url</mat-label>
+                @for(url of getImageFromArray().controls;track url ; let i = $index){
+                    <mat-form-field>
+                        <input matInput placeholder="Enter the image Url" [formControlName]="i">
+                    </mat-form-field>
+                    @if(productForm.get('i')?.invalid && (productForm.get('i')?.dirty || productForm.get('i')?.touched)){
+                        @if(productForm.get('i')?.errors?.['required']){
+                            <mat-error>Image Url is Required.</mat-error>
+                        }
+                    }
+                }    
+                <button mat-button type="button" (click)="addUrl()">Add Url</button>  
+            </div>
+        </div>
 
         <div style="margin-top: 5px;">
             <button mat-button [disabled]="productForm.invalid" type="submit">

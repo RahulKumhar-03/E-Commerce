@@ -1,0 +1,34 @@
+<div style="justify-items: center;">
+    <h2 style="padding-top: 5px;">{{deliveryService.isEditing() ? 'Update Delivery Location' : 'New Delivery Location'}}</h2>
+    
+    <form [formGroup]="deliveryForm" (submit)="submitDeliveryForm()" style="display: flex; flex-direction: column; margin: auto; width: 80%; padding: 20px 0;">
+        <mat-form-field>
+            <mat-label>Enter City Name</mat-label>
+            <input matInput placeholder="Enter City Name eg.Mumbai" formControlName="city">
+        </mat-form-field>
+        @if(deliveryForm.get('city')?.invalid && (deliveryForm.get('city')?.dirty || deliveryForm.get('city')?.touched)){
+            @if(deliveryForm.get('city')?.errors?.['required']){
+                <mat-error>Delivery City Name is required</mat-error>
+            }
+        }
+
+        <mat-form-field>
+            <mat-label>Enter State Name</mat-label>
+            <input matInput placeholder="Enter State Name eg. Goa" formControlName="state">
+        </mat-form-field>
+        @if(deliveryForm.get('state')?.invalid && (deliveryForm.get('state')?.dirty || deliveryForm.get('state')?.touched)){
+            @if(deliveryForm.get('state')?.errors?.['required']){
+                <mat-error>Delivery State Name is required</mat-error>
+            }
+        }
+
+        <div style="margin-top: 5px;">
+            <button mat-button [disabled]="deliveryForm.invalid" type="submit">
+                Submit
+            </button>
+            <button mat-button (click)="onDialogClose()">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>

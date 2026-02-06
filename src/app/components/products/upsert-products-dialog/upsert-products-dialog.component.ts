@@ -1,34 +1,37 @@
 import { Component, inject, Inject, OnInit, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Products } from '../../../core/interfaces/products.interface';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ProductsCategory } from '../../../core/interfaces/products-category.interface';
 import { MatSelectModule } from '@angular/material/select'
 import { ProductService } from '../../../core/services/products/product.service';
+import { InventoryService } from '../../../core/services/inventory/inventory.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-upsert-products-dialog',
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule],
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatIconModule],
   templateUrl: './upsert-products-dialog.component.html',
   styleUrl: './upsert-products-dialog.component.scss'
 })
 export class UpsertProductsDialogComponent implements OnInit {
   
   public categories: ProductsCategory[] = [];
-  id = signal(0);
+  public imageUrl: string = ''; 
   public productForm: FormGroup;
   public service = inject(ProductService);
 
-  constructor(private dialogRef: MatDialogRef<UpsertProductsDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: Products, private fb: FormBuilder){
+  constructor(private dialogRef: MatDialogRef<UpsertProductsDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: Products, private fb: FormBuilder, private inventoryService: InventoryService){
     this.productForm = this.fb.group({
-      id: [this.id() + 1, Validators.required],
       name: ['', Validators.required],
-      categoryId:[0, Validators.required],
+      categoryId:[null, Validators.required],
       description: ['', Validators.required],
       price: [500, Validators.required],
+      productImages: this.fb.array([], Validators.required),
+      quantity: [0, [Validators.required, Validators.min(0)]],
     });
   }
 
@@ -40,39 +43,66 @@ export class UpsertProductsDialogComponent implements OnInit {
         name: this.data.name,
         description: this.data.description,
         categoryId: this.data.categoryId,
-        price: this.data.price
+        price: this.data.price,
+        productImages: this.populateProductImagesForEdit(this.data.productsImages),
+        quantity: this.data.quantity,
       })
     }
+    
+    this.loadCategories();
+  }
+
+  public populateProductImagesForEdit(data: string[]){
+    const formArray = this.productForm.get('productImages') as FormArray;
+    formArray.clear();
+
+    data.forEach(imageUrl => formArray.push(this.fb.control(imageUrl)))
+  }
+
+  public loadCategories(){
+    this.categories = this.inventoryService.getInventory().category || [];
+  }
+
+  public getImageFromArray(): FormArray {
+    return this.productForm.get('productImages') as FormArray
+  }
+
+  public addUrl(){
+    this.getImageFromArray().push(this.fb.control('', Validators.required));
   }
   
   public submitProductForm(){
     if(this.productForm.valid){
-      console.log(this.id());
-      
-      const newProductData = {
-        id: this.id() + 1,
-        name: this.productForm.value.name,
-        description: this.productForm.value.description,
-        price: this.productForm.value.price,
-        categoryId: this.productForm.value.categoryId,
-        productsImages: [],
-        review: [],
-      } as Products;
 
-      if(this.service.isEditting() && this.data.id){
-        const updatedProductData = {
-          id: this.id(),
+      if(this.service.isEditting() && this.data?.id){
+        const updatedProductData: Products = {
+          id: this.data.id,
           name: this.productForm.value.name,
           description: this.productForm.value.description,
           price: this.productForm.value.price,
           categoryId: this.data.categoryId,
-          productsImages: [],
+          productsImages: this.productForm.value.productImages,
           review: [],
-        } as Products
+          quantity: this.productForm.value.quantity,
+          isDeliverable: false
+        };
+
+        this.inventoryService.updateStock(updatedProductData.categoryId, updatedProductData.id, updatedProductData.quantity);
         this.dialogRef.close(updatedProductData);
       }
 
       else {
+        const newProductData: Products = {
+          id: this.service.generateId(),
+          name: this.productForm.value.name,
+          description: this.productForm.value.description,
+          price: this.productForm.value.price,
+          categoryId: this.productForm.value.categoryId,
+          productsImages: this.productForm.value.productImages,
+          review: [],
+          quantity: this.productForm.value.quantity,
+          isDeliverable: false
+        };
         this.dialogRef.close(newProductData);
       }
 
